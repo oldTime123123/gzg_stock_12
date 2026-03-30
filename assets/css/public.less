@@ -1,0 +1,252 @@
+/* ================ 全局变量（统一管理，一改全改） ================ */
+:root {
+  --pageWidth: 430px;
+  --pagePading: 16px;
+
+  // 主色调（你随时可以换成别的配色）
+  --mainColor: #2D57FF;
+  --btnColor: var(--mainColor);
+  --greenTextColor: #02CD8E;
+  --colorUp: #FF0000;
+  --colorDown: #02CD8E;
+  --colorUp2: #02CD8E;
+  --colorDown2: #ce4040;
+
+  // 背景色
+  --bodyBgColor: #fff;
+  --secondBoxBg: #f6f3fc;
+  --thirdBoxBg: #fff;
+
+  // 文字色
+  --textMain: #000;
+  --textSecond: #7E7E7E;
+  --textThird: #666;
+  --textDark: #130040;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+.langIconEl{
+  background: url('~/assets/images/icon/langIcon.png') no-repeat 100%/100%;
+}
+.topStickyEl{
+  background: var(--mainColor);
+}
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--textMain);
+  background: var(--bodyBgColor);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  font-family: system-ui, -apple-system, sans-serif;
+  --van-back-top-background:var(--mainColor);
+
+.depositPage,.loginPage{
+// input 错误提示颜色 边框， 文字color
+--ui-error:#FFDA1C !important;
+}
+}
+
+
+.shadow-none{
+  --ui-border-accented:0 0 transparent
+}
+
+.inp-shadow{
+  box-shadow: 0px 0px 6px 0px rgba(2, 26, 123, 0.14);
+}
+
+/* ================ 常用文本颜色类 ================ */
+.greenText   { color: var(--greenTextColor); }
+.mainText    { color: var(--mainColor); }
+.colorUp     { color: var(--colorUp); }
+.colorDown   { color: var(--colorDown); }
+.colorUp2    { color: var(--colorUp2); }
+.colorDown2  { color: var(--colorDown2); }
+.colorSecond { color: var(--textSecond); }
+.mainTextColor{color:var(--mainColor)}
+.color999    { color: #999; }
+.color666    { color: #666; }
+.colorfff    { color: #fff; }
+.color000    { color: #000; }
+
+/* ================ 页面主容器 ================ */
+.pageContent {
+  max-width: var(--pageWidth);
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+
+
+.hasNormalBg{
+  background-image: url('~/assets/images/img/normalBg.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top;
+  min-height: 100vh;
+  .tabbarPageTopNav{
+    height: 60px;
+  }
+}
+.minePage{
+  background-image: url('~/assets/images/img/minePageBg.png');
+
+}
+/* ================ 通用卡片组件（你原来的 pageBoxEl） ================ */
+.pageBoxEl {
+  background: var(--secondBoxBg);
+  border-radius: 15px;
+  padding: 16px;
+  overflow: hidden;
+
+  .boxContentEl {
+    background: var(--thirdBoxBg);
+    border-radius: 12px;
+    padding: 16px;
+    color: #000;
+
+    .c_title {
+      color: var(--textDark);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+/* ================ 底部固定按钮（最常用） ================ */
+.fixedBotBtn {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--pageWidth);
+  background: #0d081a;
+  padding: 15px var(--pagePading) 20px;
+  z-index: 999;
+
+  .gridBox2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    place-items: center;
+
+    div {
+      height: 44px;
+      line-height: 44px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .buyBtn  { background: var(--colorUp2);  color: #fff; }
+    .sellBtn { background: var(--colorDown2); color: #fff; }
+  }
+}
+
+/* ================ 交易记录项 ================ */
+.recordPage {
+  .recordItem {
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--textDark);
+
+    .between div:nth-child(1) {
+      color: var(--textThird);
+    }
+  }
+
+  .colorUp   { color: var(--colorUp2); }
+  .colorDown { color: var(--colorDown2); }
+}
+
+/* ================ 输入框美化（完美替代你原来的 inpBoxEl） ================ */
+.inpBoxEl {
+  height: 50px;
+  border: 1px solid #11473f;
+  border-radius: 12px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+
+  input {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+
+    &::placeholder {
+      color: #666;
+    }
+  }
+
+  .leftBox {
+    flex: 1;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+}
+
+/* ================ 空状态图 ================ */
+.nullData {
+  height: 200px;
+  background: url("~/assets/images/img/nullData.png") no-repeat center / 200px 200px;
+}
+
+/* ================ 其他小组件 ================ */
+.contentBtn {
+  display: block;
+  width: 100%;
+  // margin: 0;
+  background: var(--mainColor);
+  color: #fff;
+  text-align: center;
+  border-radius: 12px;
+  height: 44px;
+  line-height: 44px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active { opacity: 0.8; }
+}
+.disAbledBtn{
+  background: #ccc;
+}
+.borderContentBtn{
+  border:1px solid  var(--mainColor);
+  color: var(--mainColor);
+  text-align: center;
+  border-radius: 12px;
+  height: 44px;
+  line-height: 44px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active { opacity: 0.8; }
+}
+.cancelBtn {
+  background: #cad0db;
+  color: #fff;
+  border-radius: 50px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  transition: background 0.3s;
+
+  &:active { background: #666; }
+}
