@@ -18,10 +18,10 @@ const schema = v.object({
 
 type Schema = v.InferOutput<typeof schema>
 
-const state = reactive({
-  account: '',
-  password: ''
-})
+const formState = reactive({
+  account: "",
+  password: "",
+});
 
 
 const showPwd = ref(false);
@@ -46,7 +46,7 @@ const handleSubmit = async (values: any) => {
 
   if (!showBtnStatus.value) return
   publicStore.showLoading = true
-  const { account, password } = Object.assign({}, state, values);
+  const { account, password } = Object.assign({}, formState, values);
   userStore.phoneLogin(account, password).then(() => {
     loginStore.loadingText = t('login.l15')
     if (rememberPwd.value) {
@@ -63,7 +63,7 @@ const handleSubmit = async (values: any) => {
   })
 }
 const showBtnStatus = computed(() => {
-  const result = v.safeParse(schema, state)
+  const result = v.safeParse(schema, formState)
   return result.success
 })
 
@@ -76,8 +76,8 @@ onMounted(() => {
     rememberPwd.value = loginStore.rememberPwd
     if (loginStore.accInfo) {
       let data = JSON.parse(decryptData(loginStore.accInfo))
-      state.account = data.account
-      state.password = data.password
+      formState.account = data.account
+      formState.password = data.password
     }
 
   }
@@ -108,13 +108,13 @@ onMounted(() => {
       <van-form class="px-8 mt-7" @submit="handleSubmit">
         <div class="form-block">
           <div class="form-label">{{ $t('login.l6') }}</div>
-          <van-field v-model="state.account" name="account" :placeholder="$t('login.l7')" :border="false"
+          <van-field v-model="formState.account" name="account" :placeholder="$t('login.l7')" :border="false"
             input-align="left" class="rounded-input mt-2" :rules="[{ required: true, message: $t('login.l7') }]" />
         </div>
 
         <div class="form-block mt-6">
           <div class="form-label">{{ $t('login.l8') }}</div>
-          <van-field :type="showPwd ? 'text' : 'password'" v-model="state.password" name="password"
+          <van-field :type="showPwd ? 'text' : 'password'" v-model="formState.password" name="password"
             :placeholder="$t('login.l9')" :border="false" input-align="left" class="rounded-input mt-2" :rules="[
               { required: true, message: $t('login.l9') },
               { pattern: /.{6,}/, message: $t('login.l9') }

@@ -124,5 +124,9 @@ export default defineNuxtConfig({
   nitro: {
     // 确保输出格式为 esm
     format: "esm",
+    externals: {
+      traceInclude: ["debug", "@vue/devtools-api"],
+      inline: ["@vue/devtools-api", "vue-router"],
+    },
   },
 });

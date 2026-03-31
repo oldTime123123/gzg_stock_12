@@ -93,3 +93,7 @@ export const useUserStore = defineStore("userStore", {
     },
   },
 });
+
+// 兼容某些构建/缓存场景下错误的具名导入：import { state } from "~/stores/user"
+// 这里不在模块顶层访问 pinia，只在被调用时返回 store 实例。
+export const state = () => useUserStore();
