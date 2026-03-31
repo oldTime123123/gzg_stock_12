@@ -46,6 +46,5 @@
     "workbox-core": "^7.4.0",
     "workbox-precaching": "^7.4.0",
     "workbox-routing": "^7.4.0"
-  },
-  "packageManager": "pnpm@10.28.2"
+  }
 }

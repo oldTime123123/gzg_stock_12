@@ -24,11 +24,9 @@ declare module 'vue' {
     VanOverlay: typeof import('vant/es')['Overlay']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
-    VanProgress: typeof import('vant/es')['Progress']
     VanSticky: typeof import('vant/es')['Sticky']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
-    VanUploader: typeof import('vant/es')['Uploader']
   }
 }
 
@@ -46,9 +44,7 @@ declare global {
   const VanOverlay: typeof import('vant/es')['Overlay']
   const VanPicker: typeof import('vant/es')['Picker']
   const VanPopup: typeof import('vant/es')['Popup']
-  const VanProgress: typeof import('vant/es')['Progress']
   const VanSticky: typeof import('vant/es')['Sticky']
   const VanTabbar: typeof import('vant/es')['Tabbar']
   const VanTabbarItem: typeof import('vant/es')['TabbarItem']
-  const VanUploader: typeof import('vant/es')['Uploader']
 }

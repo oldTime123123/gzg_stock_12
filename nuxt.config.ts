@@ -29,7 +29,7 @@ export default defineNuxtConfig({
         file: "ja.json",
         isCatchallLocale: true,
       },
-      { code: "en", iso: "en-US", name: "English", file: "en.json" },
+      // { code: "en", iso: "en-US", name: "English", file: "en.json" },
     ],
     langStorage: { key: "lang", sync: true },
   },

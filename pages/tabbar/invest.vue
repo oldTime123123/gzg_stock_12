@@ -112,9 +112,9 @@ onMounted(() => {
             <div class="whiteBgEl"></div>
             <div class="yellowBgEl"></div>
 
-            <div class="flex items-center  justify-between  p-4 rounded-xl">
+            <div class="bannerContent flex items-center justify-between p-4 rounded-xl">
 
-              <div class="relative w-[120px] h-[120px] absolute z-30  " style="margin-left: -15px;">
+              <div class="chartWrap relative w-[120px] h-[120px] absolute z-30" style="margin-left: -15px;">
                 <apexchart v-if="series" type="donut" width="120px" height="120px" :options="circleChartStyle"
                   :series="series" />
 
@@ -126,18 +126,18 @@ onMounted(() => {
                 </div>
               </div>
 
-              <div class=" absolute  absBox  min-w-1/2  z-20   bg-[var(--mainColor)] p-2 rounded-lg">
-                <div class="flex items-center mt-[5px] text-[12px] colorfff justify-between"
+              <div class="absolute absBox z-20 bg-[var(--mainColor)] p-2 rounded-lg">
+                <div class="balanceRow flex items-center mt-[5px] text-[12px] colorfff justify-between"
                   v-for="(item, index) in balanceBox" :key="index">
-                  <div class="flex items-center flex-1  ">
+                  <div class="balanceLabel flex items-center flex-1">
                     <div class=" w-3 h-3" :style="{ background: item.color }"></div>
-                    <div class="ml-1 truncate  balanceNameEl flex items-center">
+                    <div class="ml-1 balanceNameEl flex items-center">
                       {{ item.name }}
-                <img v-if="index == 0" :src="showBalance ? eyeClose : eyeOpen" class="w-4 h-4 ml-1" @click="showBalance = !showBalance">
+                      <img v-if="index == 0" :src="showBalance ? eyeClose : eyeOpen" class="w-4 h-4 ml-1 shrink-0" @click="showBalance = !showBalance">
 
                     </div>
                   </div>
-                  <div class="ml-1">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
+                  <div class="balanceValue ml-1">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
                 </div>
               </div>
             </div>
@@ -177,6 +177,42 @@ onMounted(() => {
   min-height: 100%;
 }
 
+.bannerContent {
+  min-width: 0;
+}
+
+.chartWrap {
+  flex-shrink: 0;
+}
+
+.balanceRow {
+  gap: 8px;
+  min-width: 0;
+}
+
+.balanceLabel {
+  min-width: 0;
+}
+
+.balanceNameEl {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balanceValue {
+  min-width: 0;
+  max-width: 48%;
+  text-align: right;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 380px) {
   .balanceNameEl {
     max-width: 80px;
@@ -186,6 +222,10 @@ onMounted(() => {
     width: calc(100% - 130px);
     right: 0;
     font-size: 10px;
+  }
+
+  .balanceValue {
+    max-width: 44%;
   }
 }
 
@@ -197,6 +237,18 @@ onMounted(() => {
   .absBox {
     width: calc(100% - 140px);
     right: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .balanceRow {
+    align-items: flex-start;
+  }
+
+  .balanceNameEl,
+  .balanceValue {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="relative">
-    <div id="klineChartBox" class="" style="width:100%;height:400px">
+  <div class="tradeKlineWrap relative">
+    <div id="klineChartBox" class="tradeKlineBox" style="width:100%;height:400px">
     </div>
 
     <div v-if="showSkeletonLoading" class="absolute h-[300px] z-10 w-full rounded-lg left-0 top-0 rounded-xs">
@@ -267,3 +267,17 @@ defineExpose({
 })
 
 </script>
+
+<style scoped>
+.tradeKlineWrap {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tradeKlineBox {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+</style>

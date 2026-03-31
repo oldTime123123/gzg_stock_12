@@ -29,29 +29,29 @@ const isRiseClass: any = {
                 <span class="titleText colorfff font-bold text-sm">{{ data.product.pro_name }}</span>
                 <div class="flex">
                     <div
-                        class="mt-1 text-center px-2 h-[20px] leading-[20px] bg-[#FFDA1C] rounded-4xl color000 text-xs">
+                        class="codeBadge mt-1 text-center px-2 h-[20px] leading-[20px] bg-[#FFDA1C] rounded-4xl color000 text-xs">
                         {{ data.product.pro_code }}
                     </div>
                 </div>
             </div>
             <div class="pricePanel text-sm rounded-sm px-2 py-1 ml-1 "
                 :class="getBlockBgClass(true, data.product.is_rise)">
-                <div class="flex items-baseline justify-between">
-                    <div class="text-sm color000 font-bold">
+                <div class="priceRow flex items-baseline justify-between">
+                    <div class="priceValue text-sm color000 font-bold">
                         {{ UseExchangeNumber(data.product.price) }}
                     </div>
-                    <img :src="data.product?.is_rise > 1 ? upIcon : downIcon" class="w-3 h-3 ml-1" />
+                    <img :src="data.product?.is_rise > 1 ? upIcon : downIcon" class="w-3 h-3 ml-1 shrink-0" />
 
                 </div>
-                <div class="flex items-baseline text-[11px]">
-                    <div class=" ">
+                <div class="priceMeta flex items-baseline text-[11px]">
+                    <div class="priceMetaValue">
                         {{
                         getNumberType(true, data.product?.is_rise)
                         +
                         UseExchangeNumber(data.product?.rise)
                         }}
                     </div>
-                    <div class="ml-1 ">
+                    <div class="priceMetaValue ml-1">
                         ({{
                         getNumberType(true, data.product?.is_rise) +
                         data.product?.rise_rate
@@ -111,12 +111,34 @@ const isRiseClass: any = {
 .titleText {
     line-height: 1.4;
     word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.codeBadge {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .pricePanel {
     flex-shrink: 0;
-    max-width: 110px;
+    width: 126px;
+    min-width: 126px;
+}
+
+.priceMeta {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 4px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.priceValue,
+.priceMetaValue {
     min-width: 0;
+    white-space: nowrap;
 }
 
 .detailRow {
@@ -133,11 +155,18 @@ const isRiseClass: any = {
     text-align: right;
     line-height: 1.45;
     word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.detailRow > :first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 430px) {
     .pricePanel {
-        max-width: 96px;
+        width: 118px;
+        min-width: 118px;
     }
 
     .rowValue {
