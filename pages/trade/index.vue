@@ -272,7 +272,7 @@ const initializeTradePage = () => {
   setKlineLoading(true)
   requestQuoteUpdate()
 
-  if (stockStatus.value === 1) {
+  if (Number(stockStatus.value) == 1) {
     startSocketTimerHandle()
   } else {
     stopSocketTimerHandle()
