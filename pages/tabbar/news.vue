@@ -1,35 +1,37 @@
 <script lang="ts" setup>
-import { getNewsList } from "~/api/home/home";
+import { getNewsList } from "~/api/home/home"
 
 const pages = ref({
   page: 1,
   size: 20,
   pos: 1,
-});
+})
 
 const showSkeleton = ref(true)
-const recordList = ref([]);
-const loading = ref(true);
-const finished = ref(false);
-const totalSize = ref(0);
+const recordList = ref([])
+const loading = ref(true)
+const finished = ref(false)
+const totalSize = ref(0)
+
 const getRecordList = () => {
   getNewsList(pages.value)
     .then((res) => {
-      totalSize.value = res.total;
-      recordList.value = recordList.value.concat(res.list);
+      totalSize.value = res.total
+      recordList.value = recordList.value.concat(res.list)
     })
     .finally(() => {
-      loading.value = false;
+      loading.value = false
       if (recordList.value.length == totalSize.value) {
-        finished.value = true;
+        finished.value = true
       } else {
-        pages.value.page++;
+        pages.value.page++
       }
-      showSkeleton.value = false;
-    });
-};
-const router = useRouter();
-const pub = usePublicStore();
+      showSkeleton.value = false
+    })
+}
+
+const router = useRouter()
+const pub = usePublicStore()
 const goNewsDetail = (item) => {
   if (item.type !== 2) {
     pub.selectNews = item
@@ -37,38 +39,69 @@ const goNewsDetail = (item) => {
   } else {
     window.open(item.url)
   }
-};
+}
+
+const getArticleTag = (item: any) => {
+  if (item.article_type == 2) return t('news.n2')
+  if (item.article_type == 1) return t('news.n3')
+  return ''
+}
+
+const { t } = useI18n()
+
 onBeforeMount(() => {
-  getRecordList();
-});
+  getRecordList()
+})
 </script>
+
 <template>
   <section>
-    <div class="hasNormalBg">
+    <div class="min-h-full">
       <TabbarTopNavBar />
-      <div class="pageContainer px-3 mt-3 bg-white rounded-3xl">
-        <div class="pt-3">
-          <div v-if="showSkeleton">
-            <div class="mb-2 p-2 h-[80px] bg-[#dce8f9] rounded-sm"
-              v-for="(item, index) in 8" :key="index">
-            </div>
+      <div class="pageContainer mt-3 px-4 pb-2">
+        <div class="min-h-[calc(100vh-130px)] rounded-2xl border border-[rgba(45,87,255,0.08)] bg-white px-4 py-4 shadow-[0_14px_32px_rgba(2,26,123,0.10)]">
+          <div class="mb-4 text-[1.0625rem] font-extrabold leading-tight tracking-[-0.01em] text-[#243253]">{{ $t('x.a8') }}</div>
+
+          <div v-if="showSkeleton" class="space-y-3">
+            <div
+              v-for="(item, index) in 8"
+              :key="index"
+              class="h-[92px] animate-pulse rounded-2xl bg-[#eaf0ff]"
+            ></div>
           </div>
-          <van-list v-model:loading="loading" :finished="finished" :error-text="' '" :loading-text="' '"
-            :finished-text="' '" @load="getRecordList">
-            <div class="mb-3 newsItemEl relative bg-[#ECF4FE] rounded-md p-2 text-sm" v-for="item in recordList"
-              :key="item" @click="goNewsDetail(item)">
-              <div class="newsContent">
-                {{ item.name }}
-              </div>
-              <div class="color999 mt-2 text-sm">
-                {{ item.show_time_format }}
-              </div>
-              <div class="rightBot pt-0.5 colorfff text-xs" v-if="item.article_type == 2">
-                {{$t('news.n2')}}
-              </div>
-              <div class="rightBot pt-0.5 colorfff text-xs" v-else-if="item.article_type == 1">
-                {{$t('news.n3')}}
-              </div>
+
+          <van-list
+            v-else
+            v-model:loading="loading"
+            :finished="finished"
+            :error-text="' '"
+            :loading-text="' '"
+            :finished-text="' '"
+            @load="getRecordList"
+          >
+            <div class="space-y-3">
+              <button
+                v-for="(item, index) in recordList"
+                :key="item.id || index"
+                type="button"
+                class="w-full rounded-2xl border border-[rgba(45,87,255,0.08)] bg-[linear-gradient(180deg,#ffffff_0%,#f7f9ff_100%)] p-4 text-left text-base shadow-[0_12px_28px_rgba(2,26,123,0.10)]"
+                @click="goNewsDetail(item)"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="line-clamp-2 flex-1 font-semibold leading-[1.55] tracking-[-0.01em] text-[#243253]">
+                    {{ item.name }}
+                  </div>
+                  <div
+                    v-if="getArticleTag(item)"
+                    class="shrink-0 rounded-full bg-[var(--mainColor)] px-2 py-1 text-[0.75rem] font-semibold tracking-[0.04em] colorfff"
+                  >
+                    {{ getArticleTag(item) }}
+                  </div>
+                </div>
+                <div class="mt-3 text-[0.8125rem] font-medium color999">
+                  {{ item.show_time_format }}
+                </div>
+              </button>
             </div>
           </van-list>
         </div>
@@ -78,23 +111,3 @@ onBeforeMount(() => {
     <Tabbar />
   </section>
 </template>
-
-<style lang="less" scoped>
-.pageContainer {
-  min-height: calc(100vh - 130px);
-  .newsItemEl {
-    border: 2px solid #2d57ff;
-    overflow: hidden;
-    .rightBot {
-      position: absolute;
-      right: -25px;
-      bottom: -15px;
-      width: 60px;
-      height: 40px;
-      background: var(--mainColor);
-      text-align: center;
-      transform: rotate(-45deg);
-    }
-  }
-}
-</style>

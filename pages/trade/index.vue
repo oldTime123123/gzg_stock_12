@@ -439,8 +439,8 @@ onUnmounted(() => {
         >
           <div class="flex items-start justify-between gap-3 px-4">
             <div class="min-w-0 space-y-2">
-              <div class="text-[13px] font-bold tracking-[0.08em] text-[#4b5d8f]">{{ selectCurrentStock.pro_code || '--' }}</div>
-              <div class="max-w-[180px] truncate rounded-full bg-[rgba(45,87,255,0.08)] px-[10px] py-[6px] text-[12px] font-semibold leading-[1.2] text-[#2d57ff]">
+              <div class="text-[0.8125rem] font-semibold tracking-[0.08em] text-[#4b5d8f]">{{ selectCurrentStock.pro_code || '--' }}</div>
+              <div class="max-w-[180px] truncate rounded-full bg-[rgba(45,87,255,0.08)] px-[10px] py-[6px] text-[0.8125rem] font-semibold leading-none text-[#2d57ff]">
                 {{ selectedStockName }}
               </div>
             </div>
@@ -448,29 +448,21 @@ onUnmounted(() => {
 
           <div class="mt-4 flex flex-col gap-5 px-4 min-[421px]:flex-row min-[421px]:items-start min-[421px]:justify-between">
             <div class="min-w-0 flex-1 pl-[2px]" :class="displayPriceClass">
-              <div class="text-[clamp(28px,7vw,38px)] font-black leading-none">{{ formatTradeValue(topStockData.price) }}</div>
-              <div class="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-xs font-bold">
+              <div class="text-[clamp(2rem,7vw,2.5rem)] font-black leading-none tracking-[-0.04em] tabular-nums">{{ formatTradeValue(topStockData.price) }}</div>
+              <div class="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-[0.875rem] font-semibold tabular-nums">
                 <span>{{ getNumberType(true, topStockData.is_rise) + formatTradeValue(topStockData.rise) }}</span>
                 <span>{{ getNumberType(true, topStockData.is_rise) + formatTradeValue(topStockData.rise_rate) }}%</span>
               </div>
             </div>
 
-            <dl class="colorSecond m-0 grid min-w-0 grid-cols-2 gap-x-5 gap-y-4 min-[421px]:w-[47%]">
-              <div class="space-y-[6px] border-b border-[rgba(45,87,255,0.10)] pb-3">
-                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t49') }}</dt>
-                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(topData.open) }}</dd>
-              </div>
-              <div class="space-y-[6px] border-b border-[rgba(45,87,255,0.10)] pb-3">
-                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t50') }}</dt>
-                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(topData.close) }}</dd>
+            <dl class="colorSecond m-0 grid min-w-0 grid-cols-2 gap-x-5 gap-y-4 min-[421px]:w-[40%]">
+              <div class="space-y-[6px]">
+                <dt class="text-[0.75rem] font-medium leading-[1.2] tracking-[0.02em] text-[#5f7090]">{{ $t('trade.t51') }}</dt>
+                <dd class="text-[0.9375rem] font-bold leading-[1.2] tracking-[-0.01em] tabular-nums text-[#1d2744]">{{ formatTradeValue(selfData.high) }}</dd>
               </div>
               <div class="space-y-[6px]">
-                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t51') }}</dt>
-                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(selfData.high) }}</dd>
-              </div>
-              <div class="space-y-[6px]">
-                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t52') }}</dt>
-                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(selfData.low) }}</dd>
+                <dt class="text-[0.75rem] font-medium leading-[1.2] tracking-[0.02em] text-[#5f7090]">{{ $t('trade.t52') }}</dt>
+                <dd class="text-[0.9375rem] font-bold leading-[1.2] tracking-[-0.01em] tabular-nums text-[#1d2744]">{{ formatTradeValue(selfData.low) }}</dd>
               </div>
             </dl>
           </div>
@@ -482,7 +474,7 @@ onUnmounted(() => {
                   v-for="(item, index) in selectTimeList"
                   :key="item.value"
                   type="button"
-                  class="h-9 min-w-14 shrink-0 rounded-xl px-[14px] text-xs font-bold transition-all duration-200"
+                  class="h-9 min-w-14 shrink-0 rounded-xl px-[14px] text-[0.8125rem] font-semibold tracking-[-0.01em] transition-all duration-200"
                   :class="index === actTimeEl ? 'bg-white text-[#2d57ff] shadow-[0_8px_20px_rgba(9,26,99,0.16)]' : 'bg-transparent text-white/80'"
                   @click="changeActTimeType(index)"
                 >
@@ -499,16 +491,13 @@ onUnmounted(() => {
 
         <section class="overflow-hidden rounded-2xl border border-[rgba(45,87,255,0.08)] bg-white shadow-[0_14px_32px_rgba(2,26,123,0.10)]">
           <div class="flex items-center justify-between gap-3 bg-[linear-gradient(135deg,#2d57ff_0%,#2146d8_100%)] px-4 py-4 max-[420px]:flex-col max-[420px]:items-stretch">
-            <div class="space-y-1">
-              <div class="text-[15px] font-extrabold text-white">{{ $t('trade.t53') }}</div>
-              <div class="text-[11px] text-white/70">{{ $t('trade.t58') }}</div>
-            </div>
+            <div class="text-[1rem] font-extrabold leading-tight tracking-[-0.01em] text-white">{{ $t('trade.t53') }}</div>
             <div class="grid grid-cols-2 gap-1 rounded-[14px] bg-[#ffda1c] p-1 max-[420px]:w-full">
               <button
                 v-for="(item, index) in tradeTypeList"
                 :key="item"
                 type="button"
-                class="h-[34px] min-w-[74px] rounded-[10px] border-0 text-[13px] font-bold max-[420px]:min-w-0"
+                class="h-[34px] min-w-[74px] rounded-[10px] border-0 text-[0.875rem] font-semibold leading-none tracking-[-0.01em] max-[420px]:min-w-0"
                 :class="index === actTradeType ? 'bg-[#2d57ff] text-white' : 'bg-transparent text-[#2d2d2d]'"
                 @click="changeActTradeType(index)"
               >
@@ -519,7 +508,7 @@ onUnmounted(() => {
 
           <div class="grid min-w-0 gap-4 px-4 py-5">
             <div v-if="actTradeType === 0" class="grid gap-[10px]">
-              <div class="text-sm font-extrabold text-[#1d2744]">{{ $t('trade.t54') }}</div>
+              <div class="text-[0.9375rem] font-semibold leading-tight tracking-[-0.01em] text-[#1d2744]">{{ $t('trade.t54') }}</div>
               <div class="grid grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 border-b border-[#b2d2fa] pb-[10px]">
                 <button
                   type="button"
@@ -537,7 +526,7 @@ onUnmounted(() => {
                   <input
                     type="text"
                     inputmode="decimal"
-                    class="h-10 w-full border-0 bg-transparent text-center text-2xl font-extrabold text-gray-900 outline-none"
+                    class="h-10 w-full border-0 bg-transparent text-center text-[2rem] font-black tracking-[-0.04em] tabular-nums text-gray-900 outline-none"
                     :value="priceVal"
                     @input="handlePriceInput"
                     @blur="handlePriceBlur"
@@ -550,7 +539,7 @@ onUnmounted(() => {
             </div>
 
             <div class="grid gap-[10px]">
-              <div class="text-sm font-extrabold text-[#1d2744]">{{ $t('trade.t55') }}</div>
+              <div class="text-[0.9375rem] font-semibold leading-tight tracking-[-0.01em] text-[#1d2744]">{{ $t('trade.t55') }}</div>
               <div class="grid grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 border-b border-[#b2d2fa] pb-[10px]">
                 <button
                   type="button"
@@ -568,7 +557,7 @@ onUnmounted(() => {
                   <input
                     type="text"
                     inputmode="numeric"
-                    class="h-10 w-full border-0 bg-transparent text-center text-2xl font-extrabold text-gray-900 outline-none"
+                    class="h-10 w-full border-0 bg-transparent text-center text-[2rem] font-black tracking-[-0.04em] tabular-nums text-gray-900 outline-none"
                     :value="numVal"
                     @input="handleNumInput"
                     @blur="handleNumBlur"
@@ -593,51 +582,46 @@ onUnmounted(() => {
           >
             {{ $t('trade.t58') }}
           </button>
-          <div class="grid gap-1 rounded-xl bg-[#f7f9ff] px-4 py-3 text-[11px] leading-[1.6] text-[#7d87a3]">
-            <p>{{ $t('trade.t59') }}</p>
-            <p>{{ $t('trade.t60') }}</p>
+          <div class="rounded-xl bg-[#f7f9ff] px-4 py-3 text-[0.8125rem] leading-[1.65] text-[#6d7894]">
+            <p class="max-w-[34ch]">{{ $t('trade.t60') }}</p>
           </div>
         </section>
       </div>
 
       <van-popup v-model:show="showBottom" round position="bottom">
         <div class="px-5 pb-6 pt-5">
-          <div class="text-center text-lg font-black text-[#101828]">{{ $t('trade.t61') }}</div>
+          <div class="text-center text-[1.125rem] font-extrabold tracking-[-0.02em] text-[#101828]">{{ $t('trade.t61') }}</div>
 
           <div class="mt-5 overflow-hidden rounded-2xl bg-[#f7f9ff] divide-y divide-[rgba(45,87,255,0.08)]">
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t62') }}</div>
-              <div class="text-right font-bold" :class="getNumberClass(true, directionRiseType)">
+              <div class="text-right font-semibold tracking-[-0.01em]" :class="getNumberClass(true, directionRiseType)">
                 {{ tradeTypeList[actTradeType] }}--{{ directionList[buyType]?.label }}
               </div>
             </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t63') }}</div>
-              <div class="text-right font-bold text-[#16213d]">{{ safeNumVal }} {{ $t('trade.t64') }}</div>
+              <div class="text-right font-semibold tracking-[-0.01em] tabular-nums text-[#16213d]">{{ safeNumVal }} {{ $t('trade.t64') }}</div>
             </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
-              <div>{{ $t('trade.t65') }}</div>
-              <div class="text-right font-bold text-[#16213d]">X1</div>
-            </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t67') }}/{{ t('x.a9') }}</div>
-              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(safePriceVal) }}</div>
+              <div class="text-right font-semibold tracking-[-0.01em] tabular-nums text-[#16213d]">{{ formatTradeValue(safePriceVal) }}</div>
             </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t68') }}</div>
-              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(safePriceVal * safeNumVal) }}</div>
+              <div class="text-right font-semibold tracking-[-0.01em] tabular-nums text-[#16213d]">{{ formatTradeValue(safePriceVal * safeNumVal) }}</div>
             </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t69') }}</div>
-              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(feeAmount) }}</div>
+              <div class="text-right font-semibold tracking-[-0.01em] tabular-nums text-[#16213d]">{{ formatTradeValue(feeAmount) }}</div>
             </div>
-            <div class="flex items-center justify-between gap-3 bg-[#eef4ff] px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 bg-[#eef4ff] px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t70') }}</div>
-              <div class="text-right text-base font-bold text-[#2d57ff]">{{ formatTradeValue(totalAmount) }}</div>
+              <div class="text-right text-[1.125rem] font-bold tracking-[-0.02em] tabular-nums text-[#2d57ff]">{{ formatTradeValue(totalAmount) }}</div>
             </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[0.875rem] text-[#53607e]">
               <div>{{ $t('trade.t71') }}</div>
-              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(userBalance) }}</div>
+              <div class="text-right font-semibold tracking-[-0.01em] tabular-nums text-[#16213d]">{{ formatTradeValue(userBalance) }}</div>
             </div>
           </div>
 

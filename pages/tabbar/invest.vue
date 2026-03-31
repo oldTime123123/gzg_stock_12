@@ -58,6 +58,9 @@ const balanceBox = computed(() => {
 
   ]
 })
+const assetSummaryList = computed(() => {
+  return balanceBox.value.filter((_, index) => index !== 0 && index !== 3)
+})
 const pub = usePublicStore()
 
 const actRecordType = computed(() => {
@@ -110,26 +113,27 @@ onBeforeMount(() => {
                   :series="series" />
 
                 <div class="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--mainColor)]">
-                  <div class="colorfff text-center text-xs leading-[1.35]">
-                    <div>{{ t('index.i1') }}</div>
-                    <div class="mt-1 font-semibold">{{  (showBalance ? '*****' : UseExchangeNumber(balanceList.totalAsset)) }}</div>
+                  <div class="colorfff text-center text-[0.75rem] leading-[1.35]">
+                    <div class="font-medium tracking-[0.04em]">{{ t('index.i1') }}</div>
+                    <div class="mt-1 text-[1rem] font-bold tracking-[-0.02em] tabular-nums">{{  (showBalance ? '*****' : UseExchangeNumber(balanceList.totalAsset)) }}</div>
+                    <button type="button" class="mt-1 inline-flex items-center justify-center" @click="showBalance = !showBalance">
+                      <img :src="showBalance ? eyeClose : eyeOpen" class="h-4 w-4" alt="" />
+                    </button>
                   </div>
                 </div>
               </div>
 
               <div class="min-w-0 rounded-2xl bg-[linear-gradient(135deg,var(--mainColor)_0%,#244ee6_100%)] p-3 shadow-[0_10px_24px_rgba(45,87,255,0.18)]">
                 <div class="grid gap-2">
-                  <div class="flex min-w-0 items-center justify-between gap-2 text-[12px] text-white"
-                    v-for="(item, index) in balanceBox" :key="index">
+                  <div class="flex min-w-0 items-center justify-between gap-2 text-[0.8125rem] text-white"
+                    v-for="item in assetSummaryList" :key="item.name">
                     <div class="flex min-w-0 flex-1 items-center gap-2">
                       <div class="h-2.5 w-2.5 shrink-0 rounded-full" :style="{ background: item.color }"></div>
                       <div class="flex min-w-0 flex-1 items-center">
-                        <span class="min-w-0 truncate">{{ item.name }}</span>
-                        <img v-if="index == 0" :src="showBalance ? eyeClose : eyeOpen" class="ml-1 h-4 w-4 shrink-0" @click="showBalance = !showBalance">
-
+                        <span class="min-w-0 truncate font-medium tracking-[0.01em]">{{ item.name }}</span>
                       </div>
                     </div>
-                    <div class="max-w-[48%] shrink-0 truncate text-right font-semibold">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
+                    <div class="max-w-[48%] shrink-0 truncate text-right text-[0.9375rem] font-semibold tracking-[-0.01em] tabular-nums">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
                   </div>
                 </div>
               </div>
@@ -143,7 +147,7 @@ onBeforeMount(() => {
                 v-for="(tab, index) in recordTypeTabs"
                 :key="index"
                 type="button"
-                class="rounded-xl px-2 py-2 text-sm font-semibold transition-all duration-200"
+                class="rounded-xl px-2 py-2 text-[0.9375rem] font-semibold leading-none tracking-[-0.01em] transition-all duration-200"
                 :class="actRecordType == tab.type ? 'bg-white text-[var(--mainColor)] shadow-[0_8px_20px_rgba(9,26,99,0.12)]' : 'bg-transparent text-white/80'"
                 @click="changeRecordType(tab.type)">
                 {{ tab.text }}
@@ -152,9 +156,14 @@ onBeforeMount(() => {
             </div>
 
             <div class="px-4 py-4">
-              <div class="contentBtn mb-4 mt-1" v-if="actRecordType == 3" @click="changePage('/trade/spoRecord')">
+              <button
+                v-if="actRecordType == 3"
+                type="button"
+                class="mb-4 mt-1 inline-flex items-center justify-center rounded-full border border-[rgba(45,87,255,0.16)] px-4 py-2 text-[0.9375rem] font-semibold leading-none tracking-[-0.01em] text-[var(--mainColor)]"
+                @click="changePage('/trade/spoRecord')"
+              >
                 {{ $t('comm.c5') }}
-              </div>
+              </button>
 
               <InvestReocrdList :type="actRecordType" @updateUserBalance="getData" />
             </div>
