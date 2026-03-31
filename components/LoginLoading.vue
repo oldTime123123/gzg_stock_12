@@ -37,7 +37,7 @@ const showLoadingText = computed(() => {
       </div>
       <div class="botLogo bg-white flex items-center justify-center">
         <div class=" w-[64px] h-[64px] ">
-          <img src="/ico.png?v=1" class=" w-[64px] h-[64px]  rounded-xl">
+          <img src="/ico.png?v=3" class=" w-[64px] h-[64px]  rounded-xl">
         </div>
         <!-- <div class="text-2xl font-bold ml-2">
           {{ siteConfig.seo_title }}

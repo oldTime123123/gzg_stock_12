@@ -563,37 +563,7 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <div class="trade-direction-grid">
-              <button
-                v-for="item in directionList"
-                :key="item.value"
-                type="button"
-                class="trade-direction-btn"
-                :class="{
-                  'trade-direction-btn--active': buyType === item.value,
-                  'trade-direction-btn--rise': buyType === item.value && item.value === 0,
-                  'trade-direction-btn--fall': buyType === item.value && item.value === 1
-                }"
-                @click="buyType = item.value"
-              >
-                {{ item.label }}
-              </button>
-            </div>
 
-            <div class="trade-estimate">
-              <div class="trade-estimate__row">
-                <span>{{ $t('trade.t68') }}</span>
-                <strong>{{ formatTradeValue(safePriceVal * safeNumVal) }}</strong>
-              </div>
-              <div class="trade-estimate__row">
-                <span>{{ $t('trade.t69') }}</span>
-                <strong>{{ formatTradeValue(feeAmount) }}</strong>
-              </div>
-              <div class="trade-estimate__row trade-estimate__row--total">
-                <span>{{ $t('trade.t70') }}</span>
-                <strong>{{ formatTradeValue(totalAmount) }}</strong>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -931,12 +901,6 @@ onUnmounted(() => {
   background: transparent;
 }
 
-.trade-direction-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  padding: 2px 0;
-}
 
 .trade-direction-btn {
   height: 44px;

@@ -155,8 +155,8 @@ onMounted(() => {
 }
 
 .searchBox {
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.4);
 
   input::placeholder {
     color: #ccc;
