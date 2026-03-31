@@ -15,6 +15,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanBackTop: typeof import('vant/es')['BackTop']
+    VanBadge: typeof import('vant/es')['Badge']
     VanCheckbox: typeof import('vant/es')['Checkbox']
     VanField: typeof import('vant/es')['Field']
     VanForm: typeof import('vant/es')['Form']
@@ -25,6 +26,8 @@ declare module 'vue' {
     VanPopup: typeof import('vant/es')['Popup']
     VanProgress: typeof import('vant/es')['Progress']
     VanSticky: typeof import('vant/es')['Sticky']
+    VanTabbar: typeof import('vant/es')['Tabbar']
+    VanTabbarItem: typeof import('vant/es')['TabbarItem']
   }
 }
 
@@ -33,6 +36,7 @@ declare global {
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const VanBackTop: typeof import('vant/es')['BackTop']
+  const VanBadge: typeof import('vant/es')['Badge']
   const VanCheckbox: typeof import('vant/es')['Checkbox']
   const VanField: typeof import('vant/es')['Field']
   const VanForm: typeof import('vant/es')['Form']
@@ -43,4 +47,6 @@ declare global {
   const VanPopup: typeof import('vant/es')['Popup']
   const VanProgress: typeof import('vant/es')['Progress']
   const VanSticky: typeof import('vant/es')['Sticky']
+  const VanTabbar: typeof import('vant/es')['Tabbar']
+  const VanTabbarItem: typeof import('vant/es')['TabbarItem']
 }

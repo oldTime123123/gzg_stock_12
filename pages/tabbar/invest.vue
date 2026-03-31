@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-  import eyeClose from '~/assets/images/icon/m_eye_close.png';
+import eyeClose from '~/assets/images/icon/m_eye_close.png';
 import eyeOpen from '~/assets/images/icon/m_eye_open.png';
 import { computed, ref } from 'vue';
 import { getCircleOption } from '~/utils/indexLineStyle';
 import { getUserAccountBalance } from '~/api/home/home';
 const colors = ['#FFDA1C', '#E24400', '#01fff5', '#02CD8E',]
 const series = ref([0, 0, 0, 0]) // 数据: 可用资金, 冻结金额, 持仓市值
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const balanceList = ref({
   totalAsset: 0,
   balance: 0,
@@ -82,8 +82,6 @@ const changeRecordType = (type) => {
   if (actRecordType.value == type) return
   pub.actRecordType = type
   pub.showLoading = true
-  actRecordType.value = type
-
 }
 
 const router = useRouter()
@@ -97,61 +95,64 @@ const showBalance = ref(true)
 onBeforeMount(() => {
   getData()
 })
-onMounted(() => {
-
-})
 </script>
 <template>
   <section>
-    <div class="hasNormalBg">
+    <div class="min-h-full">
       <TabbarTopNavBar />
 
       <ClientOnly>
-        <div class="pageContainer px-3 mt-3">
-          <div class="investBannerEl   leftBoxEl">
-            <div class="whiteBgEl"></div>
-            <div class="yellowBgEl"></div>
-
-            <div class="bannerContent flex items-center justify-between p-4 rounded-xl">
-
-              <div class="chartWrap relative w-[120px] h-[120px] absolute z-30" style="margin-left: -15px;">
+        <div class="pageContainer mt-3 space-y-4 px-4">
+          <div class="overflow-hidden rounded-2xl border border-[rgba(45,87,255,0.08)] bg-[linear-gradient(180deg,#edf2ff_0%,#ffffff_34%,#ffffff_100%)] px-4 py-5 shadow-[0_14px_32px_rgba(2,26,123,0.10)]">
+            <div class="grid gap-4 min-[390px]:grid-cols-[120px_minmax(0,1fr)] min-[390px]:items-center">
+              <div class="relative mx-auto h-[120px] w-[120px] shrink-0">
                 <apexchart v-if="series" type="donut" width="120px" height="120px" :options="circleChartStyle"
                   :series="series" />
 
-                <div class="totalAmount flex items-center justify-center">
-                  <div class="colorfff text-center text-xs">
+                <div class="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--mainColor)]">
+                  <div class="colorfff text-center text-xs leading-[1.35]">
                     <div>{{ t('index.i1') }}</div>
-                    <div>{{  (showBalance ? '*****' : UseExchangeNumber(balanceList.totalAsset)) }}</div>
+                    <div class="mt-1 font-semibold">{{  (showBalance ? '*****' : UseExchangeNumber(balanceList.totalAsset)) }}</div>
                   </div>
                 </div>
               </div>
 
-              <div class="absolute absBox z-20 bg-[var(--mainColor)] p-2 rounded-lg">
-                <div class="balanceRow flex items-center mt-[5px] text-[12px] colorfff justify-between"
-                  v-for="(item, index) in balanceBox" :key="index">
-                  <div class="balanceLabel flex items-center flex-1">
-                    <div class=" w-3 h-3" :style="{ background: item.color }"></div>
-                    <div class="ml-1 balanceNameEl flex items-center">
-                      {{ item.name }}
-                      <img v-if="index == 0" :src="showBalance ? eyeClose : eyeOpen" class="w-4 h-4 ml-1 shrink-0" @click="showBalance = !showBalance">
+              <div class="min-w-0 rounded-2xl bg-[linear-gradient(135deg,var(--mainColor)_0%,#244ee6_100%)] p-3 shadow-[0_10px_24px_rgba(45,87,255,0.18)]">
+                <div class="grid gap-2">
+                  <div class="flex min-w-0 items-center justify-between gap-2 text-[12px] text-white"
+                    v-for="(item, index) in balanceBox" :key="index">
+                    <div class="flex min-w-0 flex-1 items-center gap-2">
+                      <div class="h-2.5 w-2.5 shrink-0 rounded-full" :style="{ background: item.color }"></div>
+                      <div class="flex min-w-0 flex-1 items-center">
+                        <span class="min-w-0 truncate">{{ item.name }}</span>
+                        <img v-if="index == 0" :src="showBalance ? eyeClose : eyeOpen" class="ml-1 h-4 w-4 shrink-0" @click="showBalance = !showBalance">
 
+                      </div>
                     </div>
+                    <div class="max-w-[48%] shrink-0 truncate text-right font-semibold">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
                   </div>
-                  <div class="balanceValue ml-1">{{ getCurrency() +(showBalance ? '*****' : UseExchangeNumber(item.amount)) }}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="recordBoxEl mt-3 pb-2">
-            <div class="grid grid-cols-3 text-center recordTypeBoxEl">
-              <div v-for="(tab, index) in recordTypeTabs" :class="actRecordType == tab.type ? 'actRecordEl' : ''"
-                :key="index" @click="changeRecordType(tab.type)">
+
+          <div class="overflow-hidden rounded-2xl border border-[rgba(45,87,255,0.08)] bg-white shadow-[0_14px_32px_rgba(2,26,123,0.10)]">
+            <div class="border-b border-[rgba(45,87,255,0.08)] bg-[linear-gradient(135deg,var(--mainColor)_0%,#244ee6_100%)] p-3">
+              <div class="grid grid-cols-3 gap-2 rounded-2xl bg-white/10 p-1 text-center">
+              <button
+                v-for="(tab, index) in recordTypeTabs"
+                :key="index"
+                type="button"
+                class="rounded-xl px-2 py-2 text-sm font-semibold transition-all duration-200"
+                :class="actRecordType == tab.type ? 'bg-white text-[var(--mainColor)] shadow-[0_8px_20px_rgba(9,26,99,0.12)]' : 'bg-transparent text-white/80'"
+                @click="changeRecordType(tab.type)">
                 {{ tab.text }}
+              </button>
               </div>
             </div>
 
-            <div class="mt-3 px-3">
-              <div class="contentBtn my-3" v-if="actRecordType == 3" @click="changePage('/trade/spoRecord')">
+            <div class="px-4 py-4">
+              <div class="contentBtn mb-4 mt-1" v-if="actRecordType == 3" @click="changePage('/trade/spoRecord')">
                 {{ $t('comm.c5') }}
               </div>
 
@@ -167,186 +168,3 @@ onMounted(() => {
     <Tabbar />
   </section>
 </template>
-
-
-
-
-
-<style lang="less" scoped>
-.hasNormalBg {
-  min-height: 100%;
-}
-
-.bannerContent {
-  min-width: 0;
-}
-
-.chartWrap {
-  flex-shrink: 0;
-}
-
-.balanceRow {
-  gap: 8px;
-  min-width: 0;
-}
-
-.balanceLabel {
-  min-width: 0;
-}
-
-.balanceNameEl {
-  min-width: 0;
-  flex: 1;
-  line-height: 1.35;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.balanceValue {
-  min-width: 0;
-  max-width: 48%;
-  text-align: right;
-  line-height: 1.35;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 380px) {
-  .balanceNameEl {
-    max-width: 80px;
-  }
-
-  .absBox {
-    width: calc(100% - 130px);
-    right: 0;
-    font-size: 10px;
-  }
-
-  .balanceValue {
-    max-width: 44%;
-  }
-}
-
-@media (min-width: 380px) {
-  .balanceNameEl {
-    max-width: 160px;
-  }
-
-  .absBox {
-    width: calc(100% - 140px);
-    right: 0;
-  }
-}
-
-@media (max-width: 360px) {
-  .balanceRow {
-    align-items: flex-start;
-  }
-
-  .balanceNameEl,
-  .balanceValue {
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-}
-
-.recordBoxEl {
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 11%);
-  box-shadow: 0px 0px 6px 0px rgba(2, 26, 123, 0.14);
-  border-radius: 10px;
-
-  .recordTypeBoxEl {
-    background: var(--mainColor);
-    height: 44px;
-    line-height: 44px;
-    border-radius: 10px 10px 0 0;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--mainColor);
-
-    >div {
-      position: relative;
-      z-index: 1;
-      cursor: pointer;
-      color: #fff;
-      transition: color 0.3s;
-
-      &.actRecordEl {
-        color: var(--mainColor);
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          background: #fff;
-          z-index: -1;
-          transform: skewX(-20deg);
-        }
-      }
-
-      &:first-child.actRecordEl::before {
-        left: -20px;
-        right: -15px;
-        border-radius: 10px 0 0 0;
-      }
-
-      &:last-child.actRecordEl::before {
-        left: -15px;
-        right: -20px;
-        border-radius: 0 10px 0 0;
-      }
-
-      &:not(:first-child):not(:last-child).actRecordEl::before {
-        left: -15px;
-        right: -15px;
-        background: #FFF;
-      }
-    }
-  }
-}
-
-.totalAmount {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background: var(--mainColor);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-.investBannerEl {
-  position: relative;
-  // height: 200px;
-  width: 100%;
-
-  .whiteBgEl {
-    width: 60%;
-    height: 100%;
-    position: absolute;
-    background: linear-gradient(#fff, #95BAEF, );
-    border-radius: 20px;
-    z-index: 10;
-  }
-
-  // .yellowBgEl {
-  //   z-index: 9;
-  //   width: 60%;
-  //   right: 0;
-  //   height: 95%;
-  //   bottom: 0;
-  //   position: absolute;
-  //   background: linear-gradient(#F8D52C, rgba(0, 0, 0, 0), );
-  //   border-radius: 20px;
-  // }
-
-  // background: url('~/assets/images/img/invest_box.png') no-repeat;
-  //   background-size: 100%;
-  //   height: 150px;
-  //   background-position: top center;
-}
-</style>

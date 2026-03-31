@@ -416,12 +416,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="trade-page">
+  <div class="pb-6">
     <ClientOnly>
       <second-page-nav-bar :title="selectedStockName">
         <button
           type="button"
-          class="favorite-button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full border-0 bg-transparent p-0"
           :disabled="collectLoading"
           @click="collectHandle"
         >
@@ -433,66 +433,83 @@ onUnmounted(() => {
         </button>
       </second-page-nav-bar>
 
-      <div class="trade-page__body px-3 mt-3">
-        <section class="lineBox quote-card rounded-2xl">
-          <div class="quote-card__head">
-            <div class="quote-card__code">{{ selectCurrentStock.pro_code || '--' }}</div>
-            <div class="quote-card__badge">{{ selectedStockName }}</div>
+      <div class="mt-3 grid min-w-0 gap-5 overflow-x-hidden px-4 pb-2">
+        <section
+          class="min-w-0 overflow-hidden rounded-2xl border border-[rgba(45,87,255,0.08)] bg-[linear-gradient(180deg,rgba(45,87,255,0.15)_0%,rgba(255,255,255,0.96)_22%,#ffffff_100%)] py-5 shadow-[0_14px_32px_rgba(2,26,123,0.10)]"
+        >
+          <div class="flex items-start justify-between gap-3 px-4">
+            <div class="min-w-0 space-y-2">
+              <div class="text-[13px] font-bold tracking-[0.08em] text-[#4b5d8f]">{{ selectCurrentStock.pro_code || '--' }}</div>
+              <div class="max-w-[180px] truncate rounded-full bg-[rgba(45,87,255,0.08)] px-[10px] py-[6px] text-[12px] font-semibold leading-[1.2] text-[#2d57ff]">
+                {{ selectedStockName }}
+              </div>
+            </div>
           </div>
 
-          <div class="quote-card__summary">
-            <div class="quote-card__main" :class="displayPriceClass">
-              <div class="quote-card__price">{{ formatTradeValue(topStockData.price) }}</div>
-              <div class="quote-card__delta">
+          <div class="mt-4 flex flex-col gap-5 px-4 min-[421px]:flex-row min-[421px]:items-start min-[421px]:justify-between">
+            <div class="min-w-0 flex-1 pl-[2px]" :class="displayPriceClass">
+              <div class="text-[clamp(28px,7vw,38px)] font-black leading-none">{{ formatTradeValue(topStockData.price) }}</div>
+              <div class="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-xs font-bold">
                 <span>{{ getNumberType(true, topStockData.is_rise) + formatTradeValue(topStockData.rise) }}</span>
                 <span>{{ getNumberType(true, topStockData.is_rise) + formatTradeValue(topStockData.rise_rate) }}%</span>
               </div>
             </div>
 
-            <dl class="quote-card__stats colorSecond">
-              <div class="quote-card__stat">
-                <dt>{{ $t('trade.t49') }}</dt>
-                <dd>{{ formatTradeValue(topData.open) }}</dd>
+            <dl class="colorSecond m-0 grid min-w-0 grid-cols-2 gap-x-5 gap-y-4 min-[421px]:w-[47%]">
+              <div class="space-y-[6px] border-b border-[rgba(45,87,255,0.10)] pb-3">
+                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t49') }}</dt>
+                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(topData.open) }}</dd>
               </div>
-              <div class="quote-card__stat">
-                <dt>{{ $t('trade.t50') }}</dt>
-                <dd>{{ formatTradeValue(topData.close) }}</dd>
+              <div class="space-y-[6px] border-b border-[rgba(45,87,255,0.10)] pb-3">
+                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t50') }}</dt>
+                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(topData.close) }}</dd>
               </div>
-              <div class="quote-card__stat">
-                <dt>{{ $t('trade.t51') }}</dt>
-                <dd>{{ formatTradeValue(selfData.high) }}</dd>
+              <div class="space-y-[6px]">
+                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t51') }}</dt>
+                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(selfData.high) }}</dd>
               </div>
-              <div class="quote-card__stat">
-                <dt>{{ $t('trade.t52') }}</dt>
-                <dd>{{ formatTradeValue(selfData.low) }}</dd>
+              <div class="space-y-[6px]">
+                <dt class="text-[11px] leading-[1.2]">{{ $t('trade.t52') }}</dt>
+                <dd class="text-[14px] font-bold leading-[1.2] text-[#1d2744]">{{ formatTradeValue(selfData.low) }}</dd>
               </div>
             </dl>
           </div>
 
-          <div class="px-3">
-            <div class="kline-periods">
-              <button v-for="(item, index) in selectTimeList" :key="item.value" type="button" class="period-chip"
-                :class="{ 'period-chip--active': index === actTimeEl }" @click="changeActTimeType(index)">
-                {{ item.name }}
-              </button>
+          <div class="mt-5 border-t border-[rgba(45,87,255,0.10)] pt-4">
+            <div class="px-3">
+              <div class="flex justify-between gap-1 overflow-x-auto rounded-[18px] bg-[linear-gradient(135deg,#2d57ff_0%,#2146d8_100%)] p-1">
+                <button
+                  v-for="(item, index) in selectTimeList"
+                  :key="item.value"
+                  type="button"
+                  class="h-9 min-w-14 shrink-0 rounded-xl px-[14px] text-xs font-bold transition-all duration-200"
+                  :class="index === actTimeEl ? 'bg-white text-[#2d57ff] shadow-[0_8px_20px_rgba(9,26,99,0.16)]' : 'bg-transparent text-white/80'"
+                  @click="changeActTimeType(index)"
+                >
+                  {{ item.name }}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="quote-card__chart px-3">
-            <TradeKline ref="TradeKlineRef" @updateHomeKlineTopData="updateHomeKlineTopData" />
+            <div class="mt-4 min-w-0 overflow-hidden px-3">
+              <TradeKline ref="TradeKlineRef" @updateHomeKlineTopData="updateHomeKlineTopData" />
+            </div>
           </div>
         </section>
 
-        <section class="tradeContentBoxEl trade-panel rounded-2xl overflow-hidden">
-          <div class="trade-panel__header">
-            <div class="trade-panel__title">{{ $t('trade.t53') }}</div>
-            <div class="trade-mode-switch">
+        <section class="overflow-hidden rounded-2xl border border-[rgba(45,87,255,0.08)] bg-white shadow-[0_14px_32px_rgba(2,26,123,0.10)]">
+          <div class="flex items-center justify-between gap-3 bg-[linear-gradient(135deg,#2d57ff_0%,#2146d8_100%)] px-4 py-4 max-[420px]:flex-col max-[420px]:items-stretch">
+            <div class="space-y-1">
+              <div class="text-[15px] font-extrabold text-white">{{ $t('trade.t53') }}</div>
+              <div class="text-[11px] text-white/70">{{ $t('trade.t58') }}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-1 rounded-[14px] bg-[#ffda1c] p-1 max-[420px]:w-full">
               <button
                 v-for="(item, index) in tradeTypeList"
                 :key="item"
                 type="button"
-                class="trade-mode-switch__item"
-                :class="{ 'trade-mode-switch__item--active': index === actTradeType }"
+                class="h-[34px] min-w-[74px] rounded-[10px] border-0 text-[13px] font-bold max-[420px]:min-w-0"
+                :class="index === actTradeType ? 'bg-[#2d57ff] text-white' : 'bg-transparent text-[#2d2d2d]'"
                 @click="changeActTradeType(index)"
               >
                 {{ item }}
@@ -500,13 +517,13 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <div class="trade-panel__body">
-            <div v-if="actTradeType === 0" class="trade-input-block">
-              <div class="trade-input-block__label">{{ $t('trade.t54') }}</div>
-              <div class="trade-stepper borderB">
+          <div class="grid min-w-0 gap-4 px-4 py-5">
+            <div v-if="actTradeType === 0" class="grid gap-[10px]">
+              <div class="text-sm font-extrabold text-[#1d2744]">{{ $t('trade.t54') }}</div>
+              <div class="grid grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 border-b border-[#b2d2fa] pb-[10px]">
                 <button
                   type="button"
-                  class="trade-stepper__action"
+                  class="inline-flex h-10 w-10 items-center justify-center border-0 bg-transparent p-0"
                   :disabled="safePriceVal <= 0"
                   @click="subPriceVal"
                 >
@@ -516,28 +533,28 @@ onUnmounted(() => {
                     name="line-md:minus-square-filled"
                   />
                 </button>
-                <div class="trade-stepper__input">
+                <div class="min-w-0">
                   <input
                     type="text"
                     inputmode="decimal"
-                    class="trade-field"
+                    class="h-10 w-full border-0 bg-transparent text-center text-2xl font-extrabold text-gray-900 outline-none"
                     :value="priceVal"
                     @input="handlePriceInput"
                     @blur="handlePriceBlur"
                   >
                 </div>
-                <button type="button" class="trade-stepper__action" @click="addPriceVal">
+                <button type="button" class="inline-flex h-10 w-10 items-center justify-center border-0 bg-transparent p-0" @click="addPriceVal">
                   <Icon class="w-7 h-7 mainTextColor" name="line-md:plus-square-filled" />
                 </button>
               </div>
             </div>
 
-            <div class="trade-input-block">
-              <div class="trade-input-block__label">{{ $t('trade.t55') }}</div>
-              <div class="trade-stepper borderB">
+            <div class="grid gap-[10px]">
+              <div class="text-sm font-extrabold text-[#1d2744]">{{ $t('trade.t55') }}</div>
+              <div class="grid grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 border-b border-[#b2d2fa] pb-[10px]">
                 <button
                   type="button"
-                  class="trade-stepper__action"
+                  class="inline-flex h-10 w-10 items-center justify-center border-0 bg-transparent p-0"
                   :disabled="safeNumVal <= 1"
                   @click="subNumVal"
                 >
@@ -547,111 +564,80 @@ onUnmounted(() => {
                     name="line-md:minus-square-filled"
                   />
                 </button>
-                <div class="trade-stepper__input">
+                <div class="min-w-0">
                   <input
                     type="text"
                     inputmode="numeric"
-                    class="trade-field"
+                    class="h-10 w-full border-0 bg-transparent text-center text-2xl font-extrabold text-gray-900 outline-none"
                     :value="numVal"
                     @input="handleNumInput"
                     @blur="handleNumBlur"
                   >
                 </div>
-                <button type="button" class="trade-stepper__action" @click="addNumVal">
+                <button type="button" class="inline-flex h-10 w-10 items-center justify-center border-0 bg-transparent p-0" @click="addNumVal">
                   <Icon class="w-7 h-7 mainTextColor" name="line-md:plus-square-filled" />
                 </button>
               </div>
             </div>
 
-            <div class="trade-direction-grid">
-              <button
-                v-for="item in directionList"
-                :key="item.value"
-                type="button"
-                class="trade-direction-btn"
-                :class="{
-                  'trade-direction-btn--active': buyType === item.value,
-                  'trade-direction-btn--rise': buyType === item.value && item.value === 0,
-                  'trade-direction-btn--fall': buyType === item.value && item.value === 1
-                }"
-                @click="buyType = item.value"
-              >
-                {{ item.label }}
-              </button>
-            </div>
-
-            <div class="trade-estimate">
-              <div class="trade-estimate__row">
-                <span>{{ $t('trade.t68') }}</span>
-                <strong>{{ formatTradeValue(safePriceVal * safeNumVal) }}</strong>
-              </div>
-              <div class="trade-estimate__row">
-                <span>{{ $t('trade.t69') }}</span>
-                <strong>{{ formatTradeValue(feeAmount) }}</strong>
-              </div>
-              <div class="trade-estimate__row trade-estimate__row--total">
-                <span>{{ $t('trade.t70') }}</span>
-                <strong>{{ formatTradeValue(totalAmount) }}</strong>
-              </div>
-            </div>
           </div>
         </section>
 
-        <section class="trade-footer">
+        <section class="grid gap-3">
           <button
             type="button"
-            class="contentBtn trade-submit-btn"
+            class="contentBtn border-0"
             :class="{ disAbledBtn: !canSubmit }"
             :disabled="!canSubmit"
             @click="showBottom = true"
           >
             {{ $t('trade.t58') }}
           </button>
-          <div class="trade-footer__tips">
+          <div class="grid gap-1 rounded-xl bg-[#f7f9ff] px-4 py-3 text-[11px] leading-[1.6] text-[#7d87a3]">
             <p>{{ $t('trade.t59') }}</p>
             <p>{{ $t('trade.t60') }}</p>
           </div>
         </section>
       </div>
 
-      <van-popup v-model:show="showBottom" round position="bottom" class="trade-popup">
-        <div class="trade-popup__content">
-          <div class="trade-popup__title">{{ $t('trade.t61') }}</div>
+      <van-popup v-model:show="showBottom" round position="bottom">
+        <div class="px-5 pb-6 pt-5">
+          <div class="text-center text-lg font-black text-[#101828]">{{ $t('trade.t61') }}</div>
 
-          <div class="trade-popup__summary">
-            <div class="trade-popup__row">
+          <div class="mt-5 overflow-hidden rounded-2xl bg-[#f7f9ff] divide-y divide-[rgba(45,87,255,0.08)]">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t62') }}</div>
-              <div :class="getNumberClass(true, directionRiseType)">
+              <div class="text-right font-bold" :class="getNumberClass(true, directionRiseType)">
                 {{ tradeTypeList[actTradeType] }}--{{ directionList[buyType]?.label }}
               </div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t63') }}</div>
-              <div>{{ safeNumVal }} {{ $t('trade.t64') }}</div>
+              <div class="text-right font-bold text-[#16213d]">{{ safeNumVal }} {{ $t('trade.t64') }}</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t65') }}</div>
-              <div>X1</div>
+              <div class="text-right font-bold text-[#16213d]">X1</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t67') }}/{{ t('x.a9') }}</div>
-              <div>{{ formatTradeValue(safePriceVal) }}</div>
+              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(safePriceVal) }}</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t68') }}</div>
-              <div>{{ formatTradeValue(safePriceVal * safeNumVal) }}</div>
+              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(safePriceVal * safeNumVal) }}</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t69') }}</div>
-              <div>{{ formatTradeValue(feeAmount) }}</div>
+              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(feeAmount) }}</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 bg-[#eef4ff] px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t70') }}</div>
-              <div>{{ formatTradeValue(totalAmount) }}</div>
+              <div class="text-right text-base font-bold text-[#2d57ff]">{{ formatTradeValue(totalAmount) }}</div>
             </div>
-            <div class="trade-popup__row">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 text-[13px] text-[#53607e]">
               <div>{{ $t('trade.t71') }}</div>
-              <div>{{ formatTradeValue(userBalance) }}</div>
+              <div class="text-right font-bold text-[#16213d]">{{ formatTradeValue(userBalance) }}</div>
             </div>
           </div>
 
@@ -669,422 +655,3 @@ onUnmounted(() => {
     </ClientOnly>
   </div>
 </template>
-
-<style lang="less" scoped>
-.trade-page {
-  --trade-page-gutter: clamp(22px, 5.8vw, 30px);
-  --trade-card-gutter: clamp(22px, 5.4vw, 28px);
-  padding-bottom: 24px;
-}
-
-.trade-page__body {
-  display: grid;
-  gap: 18px;
-  min-width: 0;
-  overflow-x: hidden;
-}
-
-.favorite-button {
-  width: 40px;
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  padding: 0;
-}
-
-.lineBox {
-  background:
-    linear-gradient(180deg, rgba(45, 87, 255, 0.15) 0%, rgba(255, 255, 255, 0.96) 20%, #ffffff 100%);
-  box-shadow: 0 14px 40px rgba(2, 26, 123, 0.12);
-  border: 1px solid rgba(45, 87, 255, 0.08);
-}
-
-.tradeContentBoxEl {
-  box-shadow: 0 14px 40px rgba(2, 26, 123, 0.12);
-  border: 1px solid rgba(45, 87, 255, 0.08);
-}
-
-.quote-card {
-  padding: 22px 0 18px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.quote-card__head {
-  padding: 0 var(--trade-card-gutter);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.quote-card__code {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #4b5d8f;
-}
-
-.quote-card__badge {
-  max-width: 60%;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(45, 87, 255, 0.08);
-  color: #2d57ff;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.quote-card__summary {
-  margin-top: 18px;
-  padding: 0 var(--trade-card-gutter);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: 16px;
-  align-items: start;
-}
-
-.quote-card__price {
-  font-size: clamp(28px, 7vw, 38px);
-  line-height: 1;
-  font-weight: 900;
-}
-
-.quote-card__main {
-  min-width: 0;
-  padding-inline-start: 2px;
-}
-
-.quote-card__delta {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.quote-card__stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 0;
-  min-width: 0;
-  padding-inline-end: 2px;
-}
-
-.quote-card__stat {
-  padding: 10px 12px;
-  background: rgba(245, 248, 255, 0.9);
-  border-radius: 14px;
-}
-
-.quote-card__stat dt {
-  font-size: 11px;
-  line-height: 1.2;
-}
-
-.quote-card__stat dd {
-  margin: 6px 0 0;
-  font-size: 13px;
-  line-height: 1.2;
-  color: #1d2744;
-  font-weight: 700;
-}
-
-.kline-periods {
-  margin: 10px  0;
-  padding: 4px;
-  display: flex;
-  gap: 4px;
-  justify-content: space-between;
-  overflow-x: auto;
-  background: linear-gradient(135deg, #2d57ff 0%, #2146d8 100%);
-  border-radius: 18px;
-  scrollbar-width: none;
-}
-
-.period-chip {
-  flex-shrink: 0;
-  min-width: 56px;
-  height: 36px;
-  border: 0;
-  border-radius: 12px;
-  padding: 0 14px;
-  color: rgba(255, 255, 255, 0.78);
-  background: transparent;
-  font-size: 12px;
-  font-weight: 700;
-  transition: all 0.2s ease;
-}
-
-.period-chip--active {
-  color: #2d57ff;
-  background: #fff;
-  box-shadow: 0 8px 20px rgba(9, 26, 99, 0.16);
-}
-
-.quote-card__chart {
-  margin-top: 18px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.trade-panel__header {
-  padding: 18px var(--trade-card-gutter) 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: linear-gradient(135deg, #2d57ff 0%, #2146d8 100%);
-}
-
-.trade-panel__title {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.trade-mode-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
-  background: #ffda1c;
-  border-radius: 14px;
-}
-
-.trade-mode-switch__item {
-  min-width: 74px;
-  height: 34px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #2d2d2d;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.trade-mode-switch__item--active {
-  color: #fff;
-  background: #2d57ff;
-}
-
-.trade-panel__body {
-  padding: 20px var(--trade-card-gutter) 20px;
-  display: grid;
-  gap: 16px;
-  min-width: 0;
-}
-
-.trade-input-block {
-  display: grid;
-  gap: 10px;
-}
-
-.trade-input-block__label {
-  font-size: 14px;
-  font-weight: 800;
-  color: #1d2744;
-}
-
-.trade-stepper {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
-  gap: 8px;
-  align-items: center;
-  padding-bottom: 10px;
-}
-
-.trade-stepper__action {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  background: transparent;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.trade-stepper__input {
-  min-width: 0;
-}
-
-.trade-field {
-  width: 100%;
-  height: 40px;
-  border: 0;
-  outline: none;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 800;
-  color: #111827;
-  background: transparent;
-}
-
-.trade-direction-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  padding: 2px 0;
-}
-
-.trade-direction-btn {
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(45, 87, 255, 0.18);
-  background: #f7f9ff;
-  color: #4b5d8f;
-  font-size: 14px;
-  font-weight: 700;
-  transition: all 0.2s ease;
-}
-
-.trade-direction-btn--active {
-  color: #fff;
-  box-shadow: 0 0px 14px rgba(2, 26, 123, 0.16);
-}
-
-.trade-direction-btn--rise {
-  background: linear-gradient(135deg, #ff7c7c 0%, #ef4444 100%);
-  border-color: transparent;
-}
-
-.trade-direction-btn--fall {
-  background: linear-gradient(135deg, #20d4a2 0%, #02cd8e 100%);
-  border-color: transparent;
-}
-
-.trade-estimate {
-  display: grid;
-  gap: 10px;
-  padding: 14px;
-  background: linear-gradient(180deg, #f8faff 0%, #f3f7ff 100%);
-  border-radius: 16px;
-}
-
-.trade-estimate__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 13px;
-  color: #5b6686;
-}
-
-.trade-estimate__row strong {
-  color: #16213d;
-  font-size: 14px;
-}
-
-.trade-estimate__row--total {
-  padding-top: 10px;
-  border-top: 1px dashed rgba(45, 87, 255, 0.18);
-}
-
-.trade-estimate__row--total strong {
-  color: #2d57ff;
-  font-size: 16px;
-}
-
-.trade-footer {
-  display: grid;
-  gap: 12px;
-}
-
-.trade-submit-btn {
-  border: 0;
-}
-
-.trade-footer__tips {
-  padding: 0 4px;
-  display: grid;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #8e8e8e;
-}
-
-.trade-footer__tips p {
-  margin: 0;
-}
-
-.trade-popup__content {
-  padding: 20px 16px 24px;
-}
-
-.trade-popup__title {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 900;
-  color: #101828;
-}
-
-.trade-popup__summary {
-  margin-top: 18px;
-  display: grid;
-  gap: 10px;
-}
-
-.trade-popup__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px;
-  background: #f6f8ff;
-  border-radius: 14px;
-  font-size: 13px;
-  color: #53607e;
-}
-
-.trade-popup__row > div:last-child {
-  color: #16213d;
-  font-weight: 700;
-  text-align: right;
-}
-
-.borderB {
-  border-bottom: 1px solid #b2d2fa;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-@media (max-width: 420px) {
-  .trade-page__body {
-    padding: 14px var(--trade-page-gutter) 0;
-  }
-
-  .quote-card__summary {
-    grid-template-columns: 1fr;
-  }
-
-  .trade-panel__header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .trade-mode-switch {
-    width: 100%;
-  }
-
-  .trade-mode-switch__item {
-    min-width: 0;
-  }
-
-  .trade-panel__body {
-    padding: 18px var(--trade-card-gutter) 18px;
-  }
-}
-</style>
