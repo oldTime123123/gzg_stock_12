@@ -6,7 +6,7 @@ import lIcon2 from '~/assets/images/icon/loan_com2.png';
 import lIcon3 from '~/assets/images/icon/loan_com3.png';
 const { t, locale } = useI18n()
 const pub = usePublicStore()
-
+//1221312312313
 const loanCom = computed(() => {
     return [
         {
