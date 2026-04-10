@@ -121,8 +121,8 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    // 确保输出格式为 esm
-    format: "esm",
-  },
+  // nitro: {
+  //   // 确保输出格式为 esm
+  //   format: "esm",
+  // },
 });
