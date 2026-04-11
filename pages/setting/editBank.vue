@@ -21,6 +21,7 @@ const state = reactive({
   account_holder: '',
   other_param_1: '',
   other_param_2: '',
+  other_param_3: '',
 
 })
 
@@ -170,6 +171,12 @@ onMounted(() => {
           <div class="form-label color000 font-bold">{{ $t('setting.s21') }}</div>
           <van-field v-model="state.other_param_2" name="other_param_2" :placeholder="$t('setting.s21')" :border="false"
             input-align="left" class="rounded-input mt-2" :rules="[{ validator: valibotValidator('other_param_2') }]" />
+        </div>
+
+        <div class="form-block mt-4">
+          <div class="form-label color000 font-bold">{{ $t('setting.s23') }}</div>
+          <van-field v-model="state.other_param_3" name="other_param_3" :placeholder="$t('setting.s23')" :border="false"
+            input-align="left" class="rounded-input mt-2" />
         </div>
 
 

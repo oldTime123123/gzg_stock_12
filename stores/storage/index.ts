@@ -1,4 +1,7 @@
-const localStorage = window ? window.localStorage : persistedState.localStorage;
+const localStorage =
+  typeof window !== "undefined"
+    ? window.localStorage
+    : persistedState.localStorage;
 
 function key(name: string): string {
   // @ts-ignore
@@ -19,7 +22,20 @@ export const storage = {
     if (raw == null) {
       return defaultValue as T;
     }
-    return JSON.parse(raw);
+    try {
+      return JSON.parse(raw);
+    } catch {
+      if (typeof defaultValue === "number") {
+        const numericValue = Number(raw);
+        return (Number.isNaN(numericValue) ? defaultValue : numericValue) as T;
+      }
+
+      if (typeof defaultValue === "boolean") {
+        return (raw === "true") as T;
+      }
+
+      return raw as T;
+    }
   },
   // 移除永久缓存
   remove(...names: string[]) {
