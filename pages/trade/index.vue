@@ -77,6 +77,8 @@ const socketParams = ref({
   range: '1d_1m'
 })
 const socketTimer = ref<ReturnType<typeof setInterval> | null>(null)
+const pendingYahooPayload = ref<Record<string, string> | null>(null)
+const waitingYahooConnect = ref(false)
 const TradeKlineRef = ref<TradeKlineExpose | null>(null)
 
 const normalizeTradeNumber = (value: unknown, fallback = 0) => {
@@ -195,13 +197,36 @@ const stopSocketTimerHandle = () => {
   }
 }
 
+const handleYahooSocketConnect = () => {
+  waitingYahooConnect.value = false
+
+  if (!pendingYahooPayload.value) return
+
+  socket.emit('yahoo', pendingYahooPayload.value)
+  pendingYahooPayload.value = null
+}
+
 const requestQuoteUpdate = () => {
   if (!socketParams.value.pro_code) return
 
   socketParams.value.range = currentTimeOption.value.value
-  socket.emit('yahoo', {
+  const yahooPayload = {
     ...socketParams.value
-  })
+  }
+
+  if (socket.connected) {
+    socket.emit('yahoo', yahooPayload)
+    return
+  }
+
+  pendingYahooPayload.value = yahooPayload
+
+  if (!waitingYahooConnect.value) {
+    waitingYahooConnect.value = true
+    socket.once('connect', handleYahooSocketConnect)
+  }
+
+  socket.connect()
 }
 
 const startSocketTimerHandle = () => {
@@ -411,6 +436,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   stopSocketTimerHandle()
+  pendingYahooPayload.value = null
+  waitingYahooConnect.value = false
+  socket.off('connect', handleYahooSocketConnect)
   socket.off('yahoo', handleYahooMessage)
 })
 </script>
@@ -419,17 +447,8 @@ onUnmounted(() => {
   <div class="trade-page">
     <ClientOnly>
       <second-page-nav-bar :title="selectedStockName">
-        <button
-          type="button"
-          class="favorite-button"
-          :disabled="collectLoading"
-          @click="collectHandle"
-        >
-          <Icon
-            name="tabler:star-filled"
-            size="25"
-            :class="isCollect ? 'text-amber-300' : 'text-white/70'"
-          />
+        <button type="button" class="favorite-button" :disabled="collectLoading" @click="collectHandle">
+          <Icon name="tabler:star-filled" size="25" :class="isCollect ? 'text-amber-300' : 'text-white/70'" />
         </button>
       </second-page-nav-bar>
 
@@ -487,14 +506,9 @@ onUnmounted(() => {
           <div class="trade-panel__header">
             <div class="trade-panel__title">{{ $t('trade.t53') }}</div>
             <div class="trade-mode-switch">
-              <button
-                v-for="(item, index) in tradeTypeList"
-                :key="item"
-                type="button"
-                class="trade-mode-switch__item"
+              <button v-for="(item, index) in tradeTypeList" :key="item" type="button" class="trade-mode-switch__item"
                 :class="{ 'trade-mode-switch__item--active': index === actTradeType }"
-                @click="changeActTradeType(index)"
-              >
+                @click="changeActTradeType(index)">
                 {{ item }}
               </button>
             </div>
@@ -504,27 +518,13 @@ onUnmounted(() => {
             <div v-if="actTradeType === 0" class="trade-input-block">
               <div class="trade-input-block__label">{{ $t('trade.t54') }}</div>
               <div class="trade-stepper borderB">
-                <button
-                  type="button"
-                  class="trade-stepper__action"
-                  :disabled="safePriceVal <= 0"
-                  @click="subPriceVal"
-                >
-                  <Icon
-                    class="w-7 h-7"
-                    :class="safePriceVal > 0 ? 'mainTextColor' : 'color999'"
-                    name="line-md:minus-square-filled"
-                  />
+                <button type="button" class="trade-stepper__action" :disabled="safePriceVal <= 0" @click="subPriceVal">
+                  <Icon class="w-7 h-7" :class="safePriceVal > 0 ? 'mainTextColor' : 'color999'"
+                    name="line-md:minus-square-filled" />
                 </button>
                 <div class="trade-stepper__input">
-                  <input
-                    type="text"
-                    inputmode="decimal"
-                    class="trade-field"
-                    :value="priceVal"
-                    @input="handlePriceInput"
-                    @blur="handlePriceBlur"
-                  >
+                  <input type="text" inputmode="decimal" class="trade-field" :value="priceVal" @input="handlePriceInput"
+                    @blur="handlePriceBlur">
                 </div>
                 <button type="button" class="trade-stepper__action" @click="addPriceVal">
                   <Icon class="w-7 h-7 mainTextColor" name="line-md:plus-square-filled" />
@@ -535,27 +535,13 @@ onUnmounted(() => {
             <div class="trade-input-block">
               <div class="trade-input-block__label">{{ $t('trade.t55') }}</div>
               <div class="trade-stepper borderB">
-                <button
-                  type="button"
-                  class="trade-stepper__action"
-                  :disabled="safeNumVal <= 1"
-                  @click="subNumVal"
-                >
-                  <Icon
-                    class="w-7 h-7"
-                    :class="safeNumVal > 1 ? 'mainTextColor' : 'color999'"
-                    name="line-md:minus-square-filled"
-                  />
+                <button type="button" class="trade-stepper__action" :disabled="safeNumVal <= 1" @click="subNumVal">
+                  <Icon class="w-7 h-7" :class="safeNumVal > 1 ? 'mainTextColor' : 'color999'"
+                    name="line-md:minus-square-filled" />
                 </button>
                 <div class="trade-stepper__input">
-                  <input
-                    type="text"
-                    inputmode="numeric"
-                    class="trade-field"
-                    :value="numVal"
-                    @input="handleNumInput"
-                    @blur="handleNumBlur"
-                  >
+                  <input type="text" inputmode="numeric" class="trade-field" :value="numVal" @input="handleNumInput"
+                    @blur="handleNumBlur">
                 </div>
                 <button type="button" class="trade-stepper__action" @click="addNumVal">
                   <Icon class="w-7 h-7 mainTextColor" name="line-md:plus-square-filled" />
@@ -568,13 +554,8 @@ onUnmounted(() => {
         </section>
 
         <section class="trade-footer">
-          <button
-            type="button"
-            class="contentBtn trade-submit-btn"
-            :class="{ disAbledBtn: !canSubmit }"
-            :disabled="!canSubmit"
-            @click="showBottom = true"
-          >
+          <button type="button" class="contentBtn trade-submit-btn" :class="{ disAbledBtn: !canSubmit }"
+            :disabled="!canSubmit" @click="showBottom = true">
             {{ $t('trade.t58') }}
           </button>
           <div class="trade-footer__tips">
@@ -625,13 +606,8 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <button
-            type="button"
-            class="contentBtn mt-4"
-            :class="{ disAbledBtn: !canSubmit || submitLoading }"
-            :disabled="!canSubmit || submitLoading"
-            @click="confirmHandle"
-          >
+          <button type="button" class="contentBtn mt-4" :class="{ disAbledBtn: !canSubmit || submitLoading }"
+            :disabled="!canSubmit || submitLoading" @click="confirmHandle">
             {{ $t('trade.t72') }}
           </button>
         </div>
@@ -771,7 +747,7 @@ onUnmounted(() => {
 }
 
 .kline-periods {
-  margin: 10px  0;
+  margin: 10px 0;
   padding: 4px;
   display: flex;
   gap: 4px;
@@ -1011,7 +987,7 @@ onUnmounted(() => {
   color: #53607e;
 }
 
-.trade-popup__row > div:last-child {
+.trade-popup__row>div:last-child {
   color: #16213d;
   font-weight: 700;
   text-align: right;
