@@ -38,13 +38,17 @@ const schema = v.object({
     v.string(),
     v.nonEmpty(t('setting.s9')),
   ),
-  other_param_1: v.pipe(
-    v.string(),
-    v.nonEmpty(t('setting.s10')),
-  ),
+  // other_param_1: v.pipe(
+  //   v.string(),
+  //   v.nonEmpty(t('setting.s10')),
+  // ),
   other_param_2: v.pipe(
     v.string(),
     v.nonEmpty(t('setting.s21')),
+  ),
+  other_param_3: v.pipe(
+    v.string(),
+    v.nonEmpty(t('setting.s24')),
   ),
   balance_type: v.pipe(
     v.number(),
@@ -173,18 +177,18 @@ onMounted(() => {
             input-align="left" class="rounded-input mt-2" :rules="[{ validator: valibotValidator('other_param_2') }]" />
         </div>
 
-        <div class="form-block mt-4">
+        <div class="form-block mt-4 mb-4">
           <div class="form-label color000 font-bold">{{ $t('setting.s23') }}</div>
           <van-field v-model="state.other_param_3" name="other_param_3" :placeholder="$t('setting.s23')" :border="false"
-            input-align="left" class="rounded-input mt-2" />
+            input-align="left" class="rounded-input mt-2" :rules="[{ validator: valibotValidator('other_param_3') }]"/>
         </div>
 
 
-        <div class="form-block mt-4 mb-4">
+        <!-- <div class="form-block mt-4 mb-4">
           <div class="form-label color000 font-bold">{{ $t('xx.a5') }}</div>
           <van-field v-model="state.other_param_1" name="other_param_1" :placeholder="$t('xx.a5')" :border="false"
             input-align="left" class="rounded-input mt-2" :rules="[{ validator: valibotValidator('other_param_1') }]" />
-        </div>
+        </div> -->
 
         <div style="height: 60px;"></div>
 
