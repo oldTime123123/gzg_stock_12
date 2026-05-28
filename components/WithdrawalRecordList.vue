@@ -79,10 +79,10 @@ const fetchItemsList = () => {
                         <div>{{ $t('trade.t69') }}</div>
                         <div>{{ item.fee }}</div>
                     </div>
-                     <div class="flex justify-between items-center" v-if="item.remark">
-            <div>{{ $t('x.a23') }}</div>
-            <div>{{ item.remark }}</div>
-          </div>
+                     <div class="flex justify-between items-center" v-if="false">
+                        <div>{{ $t('x.a23') }}</div>
+                        <div>{{ item.remark }}</div>
+                      </div>
                     <div class="flex justify-between items-center">
                         <div>{{$t('comm.c96')}}</div>
                         <div :class="{
