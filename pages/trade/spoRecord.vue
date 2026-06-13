@@ -432,7 +432,7 @@ onMounted(() => {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    padding: 0 16px 10px 130px;
+    padding: 0 16px 10px 180px;
   }
 
   .tradePopHeaderTitle {
