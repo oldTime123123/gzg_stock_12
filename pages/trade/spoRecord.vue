@@ -82,16 +82,28 @@ const getSpoCurrentPrice = (item) => {
   return Number(item.product?.price ?? item.ipo?.show_price ?? 0)
 }
 
+const formatSpoProfitRate = (value) => {
+  const text = String(value ?? '').trim()
+  if (!text) return '0%'
+  if (text.startsWith('+') || text.startsWith('-')) return text
+  const numberValue = Number(text.replace('%', '').replace(/,/g, ''))
+  if (numberValue > 0) return `+${text}`
+  return text
+}
+
 const getSpoProfitRate = (item) => {
-  if (item.product?.profit_per_rate) return item.product.profit_per_rate
+  const profitRate = item.product?.profit_per_rate ?? item.profit_per_rate
+  if (profitRate !== undefined && profitRate !== null && profitRate !== '') {
+    return formatSpoProfitRate(profitRate)
+  }
   const buyPrice = Number(item.price)
   const currentPrice = getSpoCurrentPrice(item)
   if (!buyPrice || !currentPrice) return '0%'
-  return `${(((currentPrice - buyPrice) / buyPrice) * 100).toFixed(2)}%`
+  return formatSpoProfitRate(`${(((currentPrice - buyPrice) / buyPrice) * 100).toFixed(2)}%`)
 }
 
 const getSpoProfitClass = (item) => {
-  const profit = Number(item.product?.profit_per ?? getSpoCurrentPrice(item) - Number(item.price))
+  const profit = Number(item.product?.profit_per ?? item.profit_per ?? getSpoCurrentPrice(item) - Number(item.price))
   return profit >= 0 ? 'colorUp' : 'colorDown'
 }
 
@@ -432,7 +444,7 @@ onMounted(() => {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    padding: 0 16px 10px 180px;
+    padding: 0 16px 10px 220px;
   }
 
   .tradePopHeaderTitle {
