@@ -83,6 +83,7 @@ const getSpoCurrentPrice = (item) => {
 }
 
 const getSpoProfitRate = (item) => {
+  if (item.product?.profit_per_rate) return item.product.profit_per_rate
   const buyPrice = Number(item.price)
   const currentPrice = getSpoCurrentPrice(item)
   if (!buyPrice || !currentPrice) return '0%'
@@ -90,7 +91,8 @@ const getSpoProfitRate = (item) => {
 }
 
 const getSpoProfitClass = (item) => {
-  return getSpoCurrentPrice(item) >= Number(item.price) ? 'colorUp' : 'colorDown'
+  const profit = Number(item.product?.profit_per ?? getSpoCurrentPrice(item) - Number(item.price))
+  return profit >= 0 ? 'colorUp' : 'colorDown'
 }
 
 const spoProfitRateLabel = computed(() => locale.value.startsWith('zh') ? '盈利比例' : t('trade.t116'))
@@ -367,7 +369,7 @@ onMounted(() => {
               ({{ selectData.product?.pro_code }})
             </div>
          </div>
-          <div class="mt-5 px-6 text-sm">
+          <div class="mt-5 px-6 text-sm" :class="selectData.number_type > 1 ? 'top-buy-content' : ''">
             <div class="flex mb-2 justify-between items-center">
               <div>{{ $t('trade.t105') }}</div>
               <div>{{ selectData.price }}</div>
@@ -386,7 +388,9 @@ onMounted(() => {
                   :border="false" input-align="left" />
               </div>
             </div>
-            <div class="contentBtn mt-3" @click="confirmBuyHandle">{{ $t('trade.t109') }}</div>
+            <div class="contentBtn" :class="selectData.number_type > 1 ? 'mt-8' : 'mt-3'" @click="confirmBuyHandle">
+              {{ $t('trade.t109') }}
+            </div>
           </div>
         </div>
       </div>
@@ -419,6 +423,13 @@ onMounted(() => {
 .tradePopContent {
   background: url('~/assets/images/img/dailyTradeBg.png') no-repeat;
   background-size: contain;
+
+  .top-buy-content {
+    min-height: 245px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
   .borderB {
     border-bottom: 1px solid #000;
