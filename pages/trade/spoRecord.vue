@@ -358,38 +358,41 @@ onMounted(() => {
 
     <van-overlay :show="showPop" @click="showPop = false">
       <div class="flex justify-center items-center h-full ">
-        <div class="bg-white tradePopContent h-[400px] w-[350px] relative" @click.stop>
-          <div class="absolute right-[0px] top-[30px]">
-            <Icon class="w-7 h-7 colorfff" @click="showPop = false" name="fontisto:close" />
+        <div class="tradePopContent w-[350px]" @click.stop>
+          <div class="tradePopHeader">
+            <div class="tradePopHeaderTitle">
+              <div class="colorfff font-bold truncate">
+                {{ selectData.product?.pro_name }}
+                ({{ selectData.product?.pro_code }})
+              </div>
+              <button class="tradePopClose" type="button" @click="showPop = false">
+                <Icon class="w-7 h-7 colorfff" name="fontisto:close" />
+              </button>
+            </div>
           </div>
-         <div class="flex flex-row-reverse">
-           <div class="pt-16 text-right pr-5 colorfff font-bold w-1/2 truncate">
-              <!-- {{ $t('trade.t104') }} -->
-              {{ selectData.product?.pro_name }}
-              ({{ selectData.product?.pro_code }})
-            </div>
-         </div>
-          <div class="mt-5 px-6 text-sm" :class="selectData.number_type > 1 ? 'top-buy-content' : ''">
-            <div class="flex mb-2 justify-between items-center">
-              <div>{{ $t('trade.t105') }}</div>
-              <div>{{ selectData.price }}</div>
-            </div>
-            <div class="flex mb-2 justify-between items-center" v-if="selectData.number_type <= 1">
-              <div>{{ $t('trade.t106') }}</div>
-              <div>{{ selectData.price * buyNum }}</div>
-            </div>
+          <div class="tradePopBody">
+            <div class="tradePopInner text-sm" :class="selectData.number_type > 1 ? 'top-buy-content' : ''">
+              <div class="flex mb-2 justify-between items-center">
+                <div>{{ $t('trade.t105') }}</div>
+                <div>{{ selectData.price }}</div>
+              </div>
+              <div class="flex mb-2 justify-between items-center" v-if="selectData.number_type <= 1">
+                <div>{{ $t('trade.t106') }}</div>
+                <div>{{ selectData.price * buyNum }}</div>
+              </div>
 
-            <div v-if="selectData.number_type <= 1">
-              <div class="flex  justify-between items-center">
-                <div>{{ $t('trade.t107') }}</div>
+              <div v-if="selectData.number_type <= 1">
+                <div class="flex  justify-between items-center">
+                  <div>{{ $t('trade.t107') }}</div>
+                </div>
+                <div class="borderB pb-1">
+                  <van-field type="digit" v-model="buyNum" class="w-full rounded-input" :placeholder="$t('trade.t107')"
+                    :border="false" input-align="left" />
+                </div>
               </div>
-              <div class="borderB pb-1">
-                <van-field type="digit" v-model="buyNum" class="w-full rounded-input" :placeholder="$t('trade.t107')"
-                  :border="false" input-align="left" />
+              <div class="contentBtn" :class="selectData.number_type > 1 ? 'mt-6' : 'mt-3'" @click="confirmBuyHandle">
+                {{ $t('trade.t109') }}
               </div>
-            </div>
-            <div class="contentBtn" :class="selectData.number_type > 1 ? 'mt-8' : 'mt-3'" @click="confirmBuyHandle">
-              {{ $t('trade.t109') }}
             </div>
           </div>
         </div>
@@ -421,14 +424,50 @@ onMounted(() => {
 }
 
 .tradePopContent {
-  background: url('~/assets/images/img/dailyTradeBg.png') no-repeat;
-  background-size: contain;
+  background: transparent;
+
+  .tradePopHeader {
+    aspect-ratio: 716 / 280;
+    background: url('~/assets/images/img/spoTradeTopBg.png') no-repeat top center / 100% auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0 16px 10px 130px;
+  }
+
+  .tradePopHeaderTitle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .tradePopClose {
+    flex: 0 0 auto;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    line-height: 0;
+  }
+
+  .tradePopBody {
+    overflow: hidden;
+    border-radius: 0 0 16px 16px;
+    background: var(--mainColor);
+    padding: 0 14px 14px;
+  }
+
+  .tradePopInner {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 14px;
+  }
 
   .top-buy-content {
-    min-height: 245px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
   .borderB {
