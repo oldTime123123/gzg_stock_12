@@ -78,6 +78,23 @@ const openSelectHandle = (item) => {
   showPop.value = true
 }
 
+const getSpoCurrentPrice = (item) => {
+  return Number(item.product?.price ?? item.ipo?.show_price ?? 0)
+}
+
+const getSpoProfitRate = (item) => {
+  const buyPrice = Number(item.price)
+  const currentPrice = getSpoCurrentPrice(item)
+  if (!buyPrice || !currentPrice) return '0%'
+  return `${(((currentPrice - buyPrice) / buyPrice) * 100).toFixed(2)}%`
+}
+
+const getSpoProfitClass = (item) => {
+  return getSpoCurrentPrice(item) >= Number(item.price) ? 'colorUp' : 'colorDown'
+}
+
+const spoProfitRateLabel = computed(() => locale.value.startsWith('zh') ? '盈利比例' : t('trade.t116'))
+
 const changeRecordTypeHandle = (index) => {
   // if (actRecordType.value == index) return
   if (pages.value.status) delete pages.value.status
@@ -170,51 +187,27 @@ onMounted(() => {
                 <div v-if="actRecordType == 0" class="mt-2 bg-[#ECF4FE] p-1.5 rounded-xl space-y-1">
                   <div class="flex justify-between items-center color000">
                     <div class="text-[#404040]">
-                      {{ $t('trade.t81') }}
+                      {{ $t('record.r4') }}：
                     </div>
                     <div class="">
-                      {{ item.number }}
+                      {{ UseExchangeNumber(item.price) }}
                     </div>
                   </div>
 
-                  <div class="flex justify-between items-center color000" v-if="item.exchange_name">
+                  <div class="flex justify-between items-center color000">
                     <div class="text-[#404040]">
-                      {{ $t('trade.t82') }}
+                      {{ $t('record.r5') }}：
                     </div>
                     <div class="">
-                      {{ item.exchange_name }}
+                      {{ UseExchangeNumber(getSpoCurrentPrice(item)) }}
                     </div>
                   </div>
                   <div class="flex justify-between items-center color000">
                     <div class="text-[#404040]">
-                      {{ $t('trade.t83') }}
+                      {{ spoProfitRateLabel }}：
                     </div>
-                    <div class="">
-                      {{ item.start_time_format }}
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center color000">
-                    <div class="text-[#404040]">
-                      {{ $t('trade.t84') }}
-                    </div>
-                    <div class="">
-                      {{ item.end_time_format }}
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center color000">
-                    <div class="text-[#404040]">
-                      {{ $t('trade.t85') }}
-                    </div>
-                    <div class="">
-                      {{ item.open_time_format }}
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center color000">
-                    <div class="text-[#404040]">
-                      {{ $t('trade.t86') }}
-                    </div>
-                    <div class="">
-                      {{ item.show_time_format }}
+                    <div class="" :class="getSpoProfitClass(item)">
+                      {{ getSpoProfitRate(item) }}
                     </div>
                   </div>
                   <div class="contentBtn mt-3" @click="openSelectHandle(item)">
@@ -223,14 +216,14 @@ onMounted(() => {
                 </div>
                 <!-- TYPE 1 -->
                 <div v-if="actRecordType == 1" class="mt-2 bg-[#ECF4FE] p-1.5 rounded-xl space-y-1">
-                  <div class="flex justify-between items-center color000">
+              <!--     <div class="flex justify-between items-center color000">
                     <div class="text-[#404040]">
                       {{ $t('trade.t88') }}
                     </div>
                     <div class="">
                       {{ item.ipo?.show_time_format }}
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="flex justify-between items-center color000">
                     <div class="text-[#404040]">
@@ -379,17 +372,19 @@ onMounted(() => {
               <div>{{ $t('trade.t105') }}</div>
               <div>{{ selectData.price }}</div>
             </div>
-            <div class="flex mb-2 justify-between items-center">
+            <div class="flex mb-2 justify-between items-center" v-if="selectData.number_type <= 1">
               <div>{{ $t('trade.t106') }}</div>
               <div>{{ selectData.price * buyNum }}</div>
             </div>
 
-            <div class="flex  justify-between items-center">
-              <div>{{ $t('trade.t107') }}</div>
-            </div>
-            <div class="borderB pb-1">
-              <van-field type="digit" v-model="buyNum" :disabled="selectData.number_type > 1"
-                class="w-full rounded-input" :placeholder="$t('trade.t107')" :border="false" input-align="left" />
+            <div v-if="selectData.number_type <= 1">
+              <div class="flex  justify-between items-center">
+                <div>{{ $t('trade.t107') }}</div>
+              </div>
+              <div class="borderB pb-1">
+                <van-field type="digit" v-model="buyNum" class="w-full rounded-input" :placeholder="$t('trade.t107')"
+                  :border="false" input-align="left" />
+              </div>
             </div>
             <div class="contentBtn mt-3" @click="confirmBuyHandle">{{ $t('trade.t109') }}</div>
           </div>
