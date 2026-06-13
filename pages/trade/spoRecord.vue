@@ -82,19 +82,23 @@ const getSpoCurrentPrice = (item) => {
   return Number(item.product?.price ?? item.ipo?.show_price ?? 0)
 }
 
-const formatSpoProfitRate = (value) => {
+const formatSpoProfitRate = (value, profit) => {
   const text = String(value ?? '').trim()
   if (!text) return '0%'
   if (text.startsWith('+') || text.startsWith('-')) return text
+  const profitValue = Number(profit)
+  if (profitValue < 0) return `-${text}`
+  if (profitValue > 0) return `+${text}`
   const numberValue = Number(text.replace('%', '').replace(/,/g, ''))
   if (numberValue > 0) return `+${text}`
   return text
 }
 
 const getSpoProfitRate = (item) => {
+  const profit = item.product?.profit_per ?? item.profit_per
   const profitRate = item.product?.profit_per_rate ?? item.profit_per_rate
   if (profitRate !== undefined && profitRate !== null && profitRate !== '') {
-    return formatSpoProfitRate(profitRate)
+    return formatSpoProfitRate(profitRate, profit)
   }
   const buyPrice = Number(item.price)
   const currentPrice = getSpoCurrentPrice(item)
