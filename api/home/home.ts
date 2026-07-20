@@ -365,3 +365,13 @@ export function getUserAgreement() {
     url: "/setting/userAgreement",
   });
 }
+
+/**
+ * 语言
+ * */
+//
+export function getLang() {
+  return request({
+    url: "/setting/lang",
+  });
+}

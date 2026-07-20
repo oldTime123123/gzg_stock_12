@@ -29,6 +29,22 @@ export default defineNuxtConfig({
         file: "ja.json",
         isCatchallLocale: true,
       },
+      {
+        code: "en",
+        iso: "en-US",
+        name: "英语",
+        file: "en.json",
+        isCatchallLocale: true,
+
+      },
+      {
+        code: "ko",
+        iso: "ko-KR",
+        name: "韩语",
+        file: "ko.json",
+        isCatchallLocale: true,
+
+      },
       // { code: "en", iso: "en-US", name: "English", file: "en.json" },
     ],
     langStorage: { key: "lang", sync: true },
