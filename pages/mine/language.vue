@@ -13,6 +13,10 @@ const getData = () => {
         langList.value = res
     })
 }
+const changeLang = (lang) => {
+    localStorage.setItem('lang', lang)
+    setLocale(lang)
+}
 onMounted(() => {
     pub.showLoading = false
     selectNews.value = pub.selectNews
@@ -28,7 +32,7 @@ onMounted(() => {
             <div v-for="item in langList" :key="item.name"
                 class="h-[50px] colorfff leading-[50px] text-center rounded-sm mb-3"
                 :class="item.lang == locale ? 'bg-[var(--mainColor)] ' : 'bg-[#E5F0FE] color000'"
-                @click="setLocale(item.lang)">
+                @click="changeLang(item.lang)">
                 {{ item.name }}
             </div>
         </div>

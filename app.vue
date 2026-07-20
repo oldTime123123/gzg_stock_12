@@ -3,9 +3,9 @@
     <NuxtPage class="pageContent" />
     <Loading1 />
     <RealPop />
-    <IPOactSign/>
-    <login-loading   />
-  <!-- <NuxtLoadingIndicator
+    <IPOactSign />
+    <login-loading />
+    <!-- <NuxtLoadingIndicator
     color="repeating-linear-gradient(to right, #00dc82 0%, #34cdfe 50%, #0047e1 100%)"
     :height="4"
     :throttle="200"
@@ -13,7 +13,7 @@
     <van-backTop :bottom="60" :right="10"></van-backTop>
   </div>
 </template>
-<script setup >
+<script setup>
 import socket from "~/utils/socket.ts";
 
 import { useHead, useSeoMeta, useRequestURL } from 'nuxt/app'
@@ -71,12 +71,13 @@ onMounted(() => {
   // if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   //   navigator.serviceWorker.register('/sw.js', { scope: '/' })
   // }
-    // if (loginStore.loading) {
-    //   loginStore.loading = false
+  // if (loginStore.loading) {
+  //   loginStore.loading = false
   // }
   if (!pub.setLang) {
-      setLocale('ja')
-    }
+    const lang = localStorage.getItem('lang')
+    setLocale(lang | 'ja')
+  }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(function (registrations) {
       for (let registration of registrations) {
@@ -101,7 +102,7 @@ onMounted(() => {
 
 const user = useUserStore();
 
-if(window){
+if (window) {
   window.addEventListener('error', () => {
     pub.showLoading = false
   })
@@ -116,7 +117,7 @@ onBeforeMount(() => {
 
     user.flush();
   }
-  if(notifyTimer.value){
+  if (notifyTimer.value) {
     clearInterval(notifyTimer.value)
   }
   if (pub.showIPONoticePop) {
@@ -136,14 +137,14 @@ onBeforeMount(() => {
       socket.emit('stock_status')
       notifyTimer.value = setInterval(() => {
         socket.emit('ipoNotice', params)
-        socket.emit('stock_status' )
+        socket.emit('stock_status')
       }, 5000);
       socket.on('ipoNotice', data => {
 
         if (data.id) {
-            pub.showIPONoticePop = true
+          pub.showIPONoticePop = true
           pub.ipoNoticeData = data
-          }
+        }
       })
       socket.on('stock_status', data => {
         pub.stockStatus = data.status
@@ -160,7 +161,8 @@ onBeforeMount(() => {
 .van-toast {
   background: rgba(0, 0, 0, 0.9) !important;
 }
-html{
+
+html {
   min-height: 100vh;
 }
 </style>
