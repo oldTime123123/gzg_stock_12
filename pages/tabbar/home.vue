@@ -13,56 +13,73 @@ import iSCom4 from '~/assets/images/icon/i_s_com4.png';
 import upIcon from '~/assets/images/icon/upIcon.png';
 import downIcon from '~/assets/images/icon/downIcon.png';
 const { t, locale } = useI18n()
-import { homeNoitceBarInfo, getNewsList, getTradeProduct, getStockIndexList } from '~/api/home/home'
+import { homeNoitceBarInfo, getKingKongList, getNewsList, getTradeProduct, getStockIndexList } from '~/api/home/home'
 import HomeLoading from '../components/HomeLoading.vue';
+const kingKongList = ref<Array<{ key: string, status: number }>>([])
 const commList = computed(() => {
-  return [
+  const items = [
     {
+      key: 'internal_trade',
       name: t('index.i10'),
       icon: iCom1,
       url: '/trade/insiderTrade'
     },
     {
+      key: 'block_trade',
       name: t('index.i15'),
       icon: iSCom3,
       url: '/trade/blockTrade'
 
     },
     {
+      key: 'leveraged_trade',
       name: t('index.i13'),
       icon: iCom4,
       url: '/trade/leveragedTrade'
 
     },
     {
+      key: 'spo_trade',
       name: t('index.i11'),
       icon: iCom2,
       url: '/trade/spoRecord'
     },
     {
+      key: 'stock_storage_trade',
       name: t('index.i12'),
       icon: iCom3,
       url: '/fund'
     },
 
-    // {
-    //   name: 'IPO',
-    //   icon: iSCom1,
-    //   url: '/trade/ipoRecord'
-    // },
-    // {
-    //   name:  t('index.i14'),
-    //   icon: iSCom2,
-    //   url: '/trade/dailyRecord'
-    // },
+    {
+      key: 'ipo_trade',
+      name: 'IPO',
+      icon: iSCom1,
+      url: '/trade/ipoRecord'
+    },
+    {
+      key: 'day_trade',
+      name:  t('index.i14'),
+      icon: iSCom2,
+      url: '/trade/dailyRecord'
+    },
 
     {
+      key: 'loan',
       name: t('index.i16'),
       icon: iSCom4,
       url: '/loan'
 
     },
   ]
+
+  return kingKongList.value.reduce<typeof items>((list, config) => {
+    const item = items.find(item => item.key === config.key)
+    if (config.status === 1 && item) {
+      list.push(item)
+    }
+    return list
+  }, [])
 });
 
 // const commSList = computed(() => {
@@ -107,12 +124,18 @@ const homeKlineEmitData = ref({
 })
 const showSeketLoading = ref(true)
 const showNewsSeketLoading = ref(true)
+const showKingKongSkeleton = ref(true)
 
 const selfData = ref({
   high: 0,
   low: 0
 })
 const getData = () => {
+  getKingKongList().then(res => {
+    kingKongList.value = res
+  }).finally(() => {
+    showKingKongSkeleton.value = false
+  })
   homeNoitceBarInfo().then(res => {
     if (res.status > 0) {
       noticeTxt.value = res.content
@@ -213,19 +236,17 @@ onMounted(() => {
           </div>
         </van-sticky>
         <div class="pageContainer px-3 mt-3">
-          <div class="commBoxEl  gap-2 grid grid-cols-3 py-2 rounded-2xl">
-            <div class="relative cursor-pointer  w-full" v-for="(item, index) in commList" @click="changePage(item.url)"
-              :key="index">
+          <div v-if="showKingKongSkeleton" class="commBoxEl h-[188px] animate-pulse rounded-2xl"></div>
+          <div v-else class="commBoxEl gap-2 grid grid-cols-3 py-2 rounded-2xl">
+            <div class="relative cursor-pointer  w-full" v-for="(item, index) in commList"
+              @click="changePage(item.url)" :key="index">
               <div class="flex flex-col items-center pb-1  ">
                 <img :src="item.icon" class="w-10 h-10" />
                 <div class="commWord mt-1 pt-2  w-full px-2 line-clamp-2 ">
                   <div class="font-black     text-center text-xs ">{{ item.name }}</div>
-
                 </div>
               </div>
             </div>
-
-
           </div>
 
           <div class="lineBox mt-3 p-3 rounded-xl">

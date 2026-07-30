@@ -234,6 +234,15 @@ export function homeNoitceBarInfo() {
 }
 
 /**
+ * @description 首页金刚区开关
+ */
+export function getKingKongList() {
+  return request({
+    url: "/home/kingKong",
+  });
+}
+
+/**
  * @description 新闻列表
  */
 export function getNewsList(params) {
