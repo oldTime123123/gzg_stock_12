@@ -75,7 +75,7 @@ const handleSubmit = async () => {
         if (res1.code == 200) {
           data.id_front = res1.data
         } else {
-          throw new Error(res1.message || t('xx.a3'))
+          throw new Error(res1.msg || t('xx.a2'))
         }
       } else {
      data.id_front = realUserInfo.value.id_front
@@ -87,7 +87,7 @@ const handleSubmit = async () => {
         if (res2.code == 200) {
           data.id_back = res2.data
         } else {
-          throw new Error(res2.message || t('xx.a4'))
+          throw new Error(res2.msg || t('x.a3'))
         }
       } else {
      data.id_back = realUserInfo.value.id_back

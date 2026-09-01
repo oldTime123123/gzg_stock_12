@@ -28,6 +28,7 @@ export const uploadFile = (url, data) => {
       .post(url, data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "lang":localStorage.getItem("lang") || "ja",
         },
       })
       .then((response) => {
