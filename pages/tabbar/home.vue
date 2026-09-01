@@ -14,6 +14,7 @@ import upIcon from '~/assets/images/icon/upIcon.png';
 import downIcon from '~/assets/images/icon/downIcon.png';
 const { t, locale } = useI18n()
 import { homeNoitceBarInfo, getKingKongList, getNewsList, getTradeProduct, getStockIndexList } from '~/api/home/home'
+import socket from '~/utils/socket.ts'
 import HomeLoading from '../components/HomeLoading.vue';
 const kingKongList = ref<Array<{ key: string, status: number }>>([])
 const commList = computed(() => {
@@ -204,6 +205,10 @@ const goTrade = item => {
 
 const loginStore = useLoginStore();
 onMounted(() => {
+  const token = localStorage.getItem('token')
+  if (token && !socket.connected && !socket.active) {
+    socket.connect()
+  }
   if (loginStore.loading) {
     loginStore.loading = false
   }
